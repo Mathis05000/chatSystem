@@ -3,16 +3,12 @@ package Nets;
 import Models.Message;
 import Observers.Observable;
 import Observers.Observer;
-import Observers.UDPServerObserver;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +60,7 @@ public class UDPServer extends Thread implements Observable {
     }
 
     @Override
-    public void notify(Object o) {
+    public void notify(Object o) throws UnknownHostException {
         for (Observer observer : this.listObserver) {
             observer.update(o);
         }

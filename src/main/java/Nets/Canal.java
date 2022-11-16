@@ -5,8 +5,6 @@ import Models.MessageConnect;
 import Models.MessageConnectAck;
 import Models.MessageDisconnect;
 import Observers.CanalObservable;
-import Observers.CanalObserver;
-import Observers.Observable;
 import Observers.Observer;
 import metiers.Service;
 
