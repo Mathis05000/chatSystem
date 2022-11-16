@@ -1,6 +1,6 @@
 package Observers;
 
 public interface Observable {
-    void subscribe(Object o);
+    void subscribe(Observer o);
     void notify(Object o);
 }

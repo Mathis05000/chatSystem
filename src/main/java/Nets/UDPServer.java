@@ -2,6 +2,7 @@ package Nets;
 
 import Models.Message;
 import Observers.Observable;
+import Observers.Observer;
 import Observers.UDPServerObserver;
 
 import java.io.BufferedInputStream;
@@ -20,7 +21,7 @@ public class UDPServer extends Thread implements Observable {
     private DatagramSocket dgramSocket;
     private byte[] buffer;
     private int sizeBuf = 500;
-    private List<UDPServerObserver> listObserver = new ArrayList<UDPServerObserver>();
+    private List<Observer> listObserver = new ArrayList<Observer>();
     private int portUDP = 15000;
 
     public UDPServer() throws SocketException {
@@ -58,13 +59,13 @@ public class UDPServer extends Thread implements Observable {
     }
 
     @Override
-    public void subscribe(Object o) {
-        this.listObserver.add((UDPServerObserver) o);
+    public void subscribe(Observer o) {
+        this.listObserver.add(o);
     }
 
     @Override
     public void notify(Object o) {
-        for (UDPServerObserver observer : this.listObserver) {
+        for (Observer observer : this.listObserver) {
             observer.update(o);
         }
     }
