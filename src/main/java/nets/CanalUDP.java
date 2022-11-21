@@ -1,32 +1,27 @@
-package Nets;
+package nets;
 
-import Models.Message;
-import Models.MessageConnect;
-import Models.MessageConnectAck;
-import Models.MessageDisconnect;
-import Observers.CanalObservable;
-import Observers.Observer;
 import metiers.Service;
+import models.Message;
+import models.MessageConnect;
+import models.MessageConnectAck;
+import models.MessageDisconnect;
+import observers.CanalObservable;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Canal implements Observer, CanalObservable {
+public class CanalUDP implements CanalObservable {
     private UDPServer UDPServ;
     private UDPSender UDPClient;
     private InetAddress broadcast;
-    private List<Service> observers = new ArrayList<Service>();
 
-    public Canal() throws UnknownHostException, SocketException {
+    public CanalUDP() throws UnknownHostException, SocketException {
         this.broadcast = InetAddress.getByName("255.255.255.255");
-        this.UDPServ = new UDPServer();
+        this.UDPServ = new UDPServer(this);
         this.UDPServ.start();
         this.UDPClient = new UDPSender();
-
     }
 
 
@@ -40,10 +35,10 @@ public class Canal implements Observer, CanalObservable {
         this.UDPClient.send(message, address);
     }
 
-    @Override
-    public void update(Object o) throws UnknownHostException {
+    public void messageHandler(Object o) throws UnknownHostException {
 
         Message m = (Message) o;
+
         if (!m.getSource().getHostAddress().equals(InetAddress.getLocalHost().getHostAddress())) {
 
             if (m instanceof MessageConnect) {

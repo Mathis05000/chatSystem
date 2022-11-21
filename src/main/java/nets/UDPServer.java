@@ -1,8 +1,7 @@
-package Nets;
+package nets;
 
-import Models.Message;
-import Observers.Observable;
-import Observers.Observer;
+import models.Message;
+import observers.Observer;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -12,21 +11,22 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UDPServer extends Thread implements Observable {
+class UDPServer extends Thread {
 
     private DatagramSocket dgramSocket;
     private byte[] buffer;
     private int sizeBuf = 500;
-    private List<Observer> listObserver = new ArrayList<Observer>();
     private int portUDP = 15000;
+    private CanalUDP myCanalUDP;
 
-    public UDPServer() throws SocketException {
+    UDPServer(CanalUDP canalUDP) throws SocketException {
         System.out.println("Server");
         this.dgramSocket = new DatagramSocket(this.portUDP);
         this.buffer = new byte[this.sizeBuf];
+        this.myCanalUDP = canalUDP;
     }
 
-    public Message UDPRecv() throws IOException, ClassNotFoundException {
+    private Message UDPRecv() throws IOException, ClassNotFoundException {
 
         DatagramPacket inPacket = new DatagramPacket(this.buffer, this.buffer.length);
         dgramSocket.receive(inPacket);
@@ -46,23 +46,11 @@ public class UDPServer extends Thread implements Observable {
     public void run() {
         while (true) {
             try {
-                this.notify(UDPRecv());
+                this.myCanalUDP.messageHandler(this.UDPRecv());
             } catch (IOException | ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }
-    }
-
-    @Override
-    public void subscribe(Observer o) {
-        this.listObserver.add(o);
-    }
-
-    @Override
-    public void notify(Object o) throws UnknownHostException {
-        for (Observer observer : this.listObserver) {
-            observer.update(o);
         }
     }
 }

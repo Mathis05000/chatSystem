@@ -1,6 +1,6 @@
-package Nets;
+package nets;
 
-import Models.Message;
+import models.Message;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,16 +11,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-public class UDPSender {
+class UDPSender {
 
     private DatagramSocket dgramSocket;
     private int portUDP = 15000;
 
-    public UDPSender() throws SocketException {
+    UDPSender() throws SocketException {
         this.dgramSocket = new DatagramSocket();
     }
 
-    public void send(Message data, InetAddress host) throws IOException {
+    void send(Message data, InetAddress host) throws IOException {
 
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream(5000);
         ObjectOutputStream outStream = new ObjectOutputStream(new BufferedOutputStream(byteStream));
