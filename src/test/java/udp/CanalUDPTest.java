@@ -1,4 +1,4 @@
-package nets;
+package udp;
 
 import org.junit.Before;
 

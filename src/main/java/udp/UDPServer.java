@@ -1,27 +1,23 @@
-package nets;
+package udp;
 
 import models.Message;
-import observers.Observer;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
 
 class UDPServer extends Thread {
 
     private DatagramSocket dgramSocket;
     private byte[] buffer;
     private int sizeBuf = 500;
-    private int portUDP = 15000;
     private CanalUDP myCanalUDP;
 
     UDPServer(CanalUDP canalUDP) throws SocketException {
         System.out.println("Server");
-        this.dgramSocket = new DatagramSocket(this.portUDP);
+        this.dgramSocket = new DatagramSocket(canalUDP.getPortUDP());
         this.buffer = new byte[this.sizeBuf];
         this.myCanalUDP = canalUDP;
     }

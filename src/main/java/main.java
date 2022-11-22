@@ -1,4 +1,4 @@
-import nets.CanalUDP;
+import udp.CanalUDP;
 
 import java.io.IOException;
 

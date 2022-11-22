@@ -1,4 +1,4 @@
-package nets;
+package udp;
 
 import metiers.Service;
 import models.Message;
@@ -16,23 +16,29 @@ public class CanalUDP implements CanalObservable {
     private UDPServer UDPServ;
     private UDPSender UDPClient;
     private InetAddress broadcast;
+    private int portUDP;
 
     public CanalUDP() throws UnknownHostException, SocketException {
         this.broadcast = InetAddress.getByName("255.255.255.255");
+        this.portUDP = 15000;
         this.UDPServ = new UDPServer(this);
         this.UDPServ.start();
         this.UDPClient = new UDPSender();
     }
 
-
     public void sendConnect(String pseudo) throws IOException {
-        Message message = new MessageConnect(pseudo);
-        this.UDPClient.send(message, this.broadcast);
+        MessageConnect message = new MessageConnect(pseudo);
+        this.UDPClient.send(message, this.broadcast, this.portUDP);
     }
 
     public void sendConnectAck(String pseudo, boolean valide, InetAddress address) throws IOException {
-        Message message = new MessageConnectAck(pseudo, valide);
-        this.UDPClient.send(message, address);
+        MessageConnectAck message = new MessageConnectAck(pseudo, valide);
+        this.UDPClient.send(message, address, this.portUDP);
+    }
+
+    public void sendDisconnect(String pseudo) throws IOException {
+        MessageDisconnect message = new MessageDisconnect(pseudo);
+        this.UDPClient.send(message, this.broadcast, this.portUDP);
     }
 
     public void messageHandler(Object o) throws UnknownHostException {
@@ -54,6 +60,14 @@ public class CanalUDP implements CanalObservable {
             }
         }
     }
+
+    // getters
+
+    public int getPortUDP() {
+        return this.portUDP;
+    }
+
+    // Observable
 
     @Override
     public void subscribe(Service service) {
