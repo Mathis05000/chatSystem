@@ -51,9 +51,8 @@ jobs:
         mvn package
         mkdir staging && cp target/*.jar staging
       
-    - name: Target file content
+    - name: Repo content
       run: |
-        cd target
         ls -l 
         
   deploy:
@@ -61,7 +60,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - uses: actions/checkout@v3
     
+    - name: Repo content
+      run: |
+        ls -l 
+        
     - name: persist data workflow as artifact
       uses: actions/upload-artifact@v3
       with:
