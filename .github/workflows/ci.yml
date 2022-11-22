@@ -47,9 +47,23 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: Package to .jar with maven
-      run: mvn package
+      run: |
+        mvn package
+        mkdir staging && cp target/*.jar staging
       
     - name: Target file content
       run: |
         cd target
         ls -l 
+        
+  deploy:
+    needs: [package]
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+    - name: persist data workflow as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: github-action-artifact
+        path: staging
