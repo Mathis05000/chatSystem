@@ -41,7 +41,7 @@ public class CanalUDP implements CanalObservable {
         this.UDPClient.send(message, this.broadcast, this.portUDP);
     }
 
-    public void messageHandler(Object o) throws UnknownHostException {
+    void messageHandler(Object o) throws UnknownHostException {
 
         Message m = (Message) o;
 
@@ -63,7 +63,7 @@ public class CanalUDP implements CanalObservable {
 
     // getters
 
-    public int getPortUDP() {
+    int getPortUDP() {
         return this.portUDP;
     }
 
