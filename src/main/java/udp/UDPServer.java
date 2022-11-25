@@ -16,7 +16,6 @@ class UDPServer extends Thread {
     private CanalUDP myCanalUDP;
 
     UDPServer(CanalUDP canalUDP) throws SocketException {
-        System.out.println("Server");
         this.dgramSocket = new DatagramSocket(canalUDP.getPortUDP());
         this.buffer = new byte[this.sizeBuf];
         this.myCanalUDP = canalUDP;
@@ -25,6 +24,7 @@ class UDPServer extends Thread {
     private Message UDPRecv() throws IOException, ClassNotFoundException {
 
         DatagramPacket inPacket = new DatagramPacket(this.buffer, this.buffer.length);
+
         dgramSocket.receive(inPacket);
 
         InetAddress address = inPacket.getAddress();
@@ -48,5 +48,9 @@ class UDPServer extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void shutdown() {
+        this.dgramSocket.close();
     }
 }
