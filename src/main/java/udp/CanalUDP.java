@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CanalUDP implements CanalObservable {
     private UDPServer UDPServ;
@@ -18,9 +20,12 @@ public class CanalUDP implements CanalObservable {
     private InetAddress broadcast;
     private int portUDP;
 
+    // Test attributes
+    private List<Message> bufferMessagesRecv = new ArrayList<Message>();
+
     public CanalUDP() throws UnknownHostException, SocketException {
         this.broadcast = InetAddress.getByName("255.255.255.255");
-        this.portUDP = 15000;
+        this.portUDP = 14000;
         this.UDPServ = new UDPServer(this);
         this.UDPServ.start();
         this.UDPClient = new UDPSender();
@@ -41,9 +46,11 @@ public class CanalUDP implements CanalObservable {
         this.UDPClient.send(message, this.broadcast, this.portUDP);
     }
 
-    void messageHandler(Object o) throws UnknownHostException {
+    void messageHandler(Object o) throws IOException {
 
         Message m = (Message) o;
+
+        this.bufferMessagesRecv.add(m);
 
         if (!m.getSource().getHostAddress().equals(InetAddress.getLocalHost().getHostAddress())) {
 
@@ -75,7 +82,7 @@ public class CanalUDP implements CanalObservable {
     }
 
     @Override
-    public void notifyMessageConnect(MessageConnect m) {
+    public void notifyMessageConnect(MessageConnect m) throws IOException {
         for (Service observer : this.observers) {
             observer.processMessageConnect(m);
         }
@@ -93,6 +100,17 @@ public class CanalUDP implements CanalObservable {
         for (Service observer : this.observers) {
             observer.processMessageDisconnect(m);
         }
+    }
+
+    // Test function
+
+    public List<Message> getBufferMessagesRecv() {
+        return this.bufferMessagesRecv;
+    }
+
+    public void shutDown() {
+        this.UDPServ.shutdown();
+        this.UDPServ.interrupt();
     }
 
 }
