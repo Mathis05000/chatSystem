@@ -1,8 +1,10 @@
 package metiers;
 
 import models.*;
+import observers.CanalTCPObservable;
+import observers.CanalTCPObserver;
 import udp.CanalUDP;
-import observers.CanalObserver;
+import observers.CanalUDPObserver;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -10,7 +12,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
 
-public class Service implements CanalObserver {
+public class Service implements CanalUDPObserver, CanalTCPObserver {
 
     private CanalUDP myCanalUDP;
     private Config myConfig;
@@ -58,13 +60,17 @@ public class Service implements CanalObserver {
 
     @Override
     public void processMessageSetupAck(MessageSetupAck message) throws IOException {
-        this.myConfig.addReservedPseudos(message.getData());
+        if (this.myConfig.isConnected()) {
+            this.myConfig.addReservedPseudos(message.getData());
+        }
     }
 
     @Override
     public void processMessageConnect(MessageConnect message) throws IOException {
-        this.myCanalUDP.sendConnectAck(this.myConfig.getPseudo(), true, message.getSource());
-        this.myConfig.addRemoteUser(new RemoteUser(message.getData(), message.getSource()));
+        if (this.myConfig.isConnected()) {
+            this.myCanalUDP.sendConnectAck(this.myConfig.getPseudo(), true, message.getSource());
+            this.myConfig.addRemoteUser(new RemoteUser(message.getData(), message.getSource()));
+        }
     }
 
     @Override
@@ -115,5 +121,10 @@ public class Service implements CanalObserver {
 
     public InetAddress getAddr() {
         return this.myConfig.getAddr();
+    }
+
+    @Override
+    public void processMessageChat(MessageSetup message) throws IOException {
+
     }
 }

@@ -9,7 +9,7 @@ import java.security.Provider;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface CanalObservable {
+public interface CanalUDPObservable {
 
     // Observable
     List<Service> observers = new ArrayList<Service>();

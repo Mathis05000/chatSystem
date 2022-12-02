@@ -2,7 +2,7 @@ package udp;
 
 import metiers.Service;
 import models.*;
-import observers.CanalObservable;
+import observers.CanalUDPObservable;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -11,11 +11,11 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CanalUDP implements CanalObservable {
+public class CanalUDP implements CanalUDPObservable {
     private UDPServer UDPServ;
     private UDPSender UDPClient;
     private InetAddress broadcast;
-    private int portUDP;
+    private int portUDP = 14000;
 
     private String localAddr;
 
@@ -24,7 +24,6 @@ public class CanalUDP implements CanalObservable {
 
     public CanalUDP() throws UnknownHostException, SocketException {
         this.broadcast = InetAddress.getByName("255.255.255.255");
-        this.portUDP = 14000;
         this.UDPServ = new UDPServer(this);
         this.UDPServ.start();
         this.UDPClient = new UDPSender();
@@ -55,16 +54,14 @@ public class CanalUDP implements CanalObservable {
         this.UDPClient.send(message, this.broadcast, this.portUDP);
     }
 
-    void messageHandler(Object o) throws IOException {
+    void messageHandler(Message o) throws IOException {
 
         Message m = (Message) o;
 
         this.bufferMessagesRecv.add(m);
 
-        System.out.println("1");
         if (!m.getSource().getHostAddress().equals(this.localAddr)) {
 
-            System.out.println("2");
             if (m instanceof MessageSetup) {
                 this.notifyMessageSetup((MessageSetup) m);
             }

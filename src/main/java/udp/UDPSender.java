@@ -20,7 +20,6 @@ class UDPSender {
 
     void send(Message data, InetAddress host, int port) throws IOException {
 
-        System.out.println("send" + data.getData());
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream(5000);
         ObjectOutputStream outStream = new ObjectOutputStream(new BufferedOutputStream(byteStream));
 

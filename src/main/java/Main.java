@@ -17,6 +17,9 @@ public class Main {
 
         myService.setPseudo(pseudo);
         myService.serviceSendSetup();
+
+        sc.next();
+
         myService.serviceSendConnect();
 
         System.out.println("connected");

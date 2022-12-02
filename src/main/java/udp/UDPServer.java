@@ -36,7 +36,7 @@ class UDPServer extends Thread {
 
         message.setSource(address);
 
-        return (message);
+        return message;
     }
 
     public void run() {

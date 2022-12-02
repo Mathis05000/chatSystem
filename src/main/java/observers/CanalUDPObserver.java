@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface CanalObserver {
+public interface CanalUDPObserver {
 
     // Observer
     void processMessageSetup(MessageSetup message) throws IOException;
