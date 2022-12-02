@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Service myService = new Service();
 
         System.out.println("enter pseudo");
@@ -17,6 +17,7 @@ public class Main {
 
         myService.setPseudo(pseudo);
         myService.serviceSendSetup();
+        myService.serviceSendConnect();
 
         System.out.println("connected");
 
@@ -27,6 +28,8 @@ public class Main {
         for (User user : myService.getRemoteUsers()) {
             System.out.println(user);
         }
+
+
 
     }
 }

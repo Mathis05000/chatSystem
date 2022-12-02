@@ -5,6 +5,7 @@ import udp.CanalUDP;
 import observers.CanalObserver;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -32,6 +33,12 @@ public class Service implements CanalObserver {
 
     public void serviceSendConnect() throws IOException {
         this.myCanalUDP.sendConnect(this.myConfig.getPseudo());
+        this.myConfig.setConnected(true);
+    }
+
+    public void serviceSendDisconnect() throws IOException {
+        this.myCanalUDP.sendDisconnect(this.myConfig.getPseudo());
+        this.myConfig.setConnected(true);
     }
     ///////////
 
@@ -103,4 +110,10 @@ public class Service implements CanalObserver {
     }
 
     //////////
+
+    // Test methodes
+
+    public InetAddress getAddr() {
+        return this.myConfig.getAddr();
+    }
 }
