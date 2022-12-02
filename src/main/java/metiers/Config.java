@@ -1,29 +1,50 @@
 package metiers;
 
+import models.LocalUser;
+import models.RemoteUser;
 import models.User;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 class Config {
 
-    private String pseudo;
-    private List<User> remoteUsers = new ArrayList<User>();
+    private LocalUser myUser = new LocalUser();
+    private List<RemoteUser> remoteUsers = new ArrayList<RemoteUser>();
+    private String idSetup = UUID.randomUUID().toString();
+
+    private List<String> reservedPseudos = new ArrayList<String>();
+
+    private boolean connected;
 
     public Config() {
-
+        connected = false;
     }
 
+    // Getters myUser
     public String getPseudo() {
-        return pseudo;
+        return this.myUser.getPseudo();
     }
+
+    public InetAddress getAddr() {
+        return this.myUser.getAddr();
+    }
+
+    // Setters myUser
 
     public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
+        this.myUser.setPseudo(pseudo);
     }
 
-    public void addRemoteUser(User user) {
+    public void setAddr(InetAddress addr) {
+        this.myUser.setAddr(addr);
+    }
+
+    ////
+
+    public void addRemoteUser(RemoteUser user) {
         this.remoteUsers.add(user);
     }
 
@@ -38,7 +59,27 @@ class Config {
         }
     }
 
-    public List<User> getRemoteUsers() {
+    public List<RemoteUser> getRemoteUsers() {
         return this.remoteUsers;
+    }
+
+    public String getIdSetup() {
+        return idSetup;
+    }
+
+    public List<String> getReservedPseudos() {
+        return reservedPseudos;
+    }
+
+    public void addReservedPseudos(String pseudo) {
+        this.reservedPseudos.add(pseudo);
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

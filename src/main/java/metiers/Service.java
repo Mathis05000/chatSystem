@@ -1,9 +1,6 @@
 package metiers;
 
-import models.MessageConnect;
-import models.MessageConnectAck;
-import models.MessageDisconnect;
-import models.User;
+import models.*;
 import udp.CanalUDP;
 import observers.CanalObserver;
 
@@ -19,24 +16,53 @@ public class Service implements CanalObserver {
 
     public Service() throws SocketException, UnknownHostException {
         this.myCanalUDP = new CanalUDP();
+
+        // Observers
         this.myCanalUDP.subscribe(this);
+        this.subscribe(this.myCanalUDP);
+        //
+
         this.myConfig = new Config();
+    }
+
+    // Service
+    public void serviceSendSetup() throws IOException {
+        this.myCanalUDP.sendSetup(this.myConfig.getIdSetup());
     }
 
     public void serviceSendConnect() throws IOException {
         this.myCanalUDP.sendConnect(this.myConfig.getPseudo());
     }
+    ///////////
 
     // Observer
     @Override
+    public void processMessageSetup(MessageSetup message) throws IOException {
+        if (message.getData().equals(this.myConfig.getIdSetup())) {
+            this.myConfig.setAddr(message.getSource());
+            this.notify(this.myConfig.getAddr().getHostAddress());
+        }
+        else {
+            if (this.myConfig.isConnected()) {
+                this.myCanalUDP.sendSetupAck(this.myConfig.getPseudo(), message.getSource());
+            }
+        }
+    }
+
+    @Override
+    public void processMessageSetupAck(MessageSetupAck message) throws IOException {
+        this.myConfig.addReservedPseudos(message.getData());
+    }
+
+    @Override
     public void processMessageConnect(MessageConnect message) throws IOException {
         this.myCanalUDP.sendConnectAck(this.myConfig.getPseudo(), true, message.getSource());
-        this.myConfig.addRemoteUser(new User(message.getData(), message.getSource()));
+        this.myConfig.addRemoteUser(new RemoteUser(message.getData(), message.getSource()));
     }
 
     @Override
     public void processMessageConnectAck(MessageConnectAck message) {
-        this.myConfig.addRemoteUser(new User(message.getData(), message.getSource()));
+        this.myConfig.addRemoteUser(new RemoteUser(message.getData(), message.getSource()));
     }
 
     @Override
@@ -44,15 +70,37 @@ public class Service implements CanalObserver {
         this.myConfig.delRemoteUser(message.getSource());
     }
 
+    //////////
+
+    // Observable
+
+    @Override
+    public void subscribe(CanalUDP canalUDP) {
+        this.observers.add(canalUDP);
+    }
+
+    @Override
+    public void notify(String addr) {
+        for (CanalUDP c : this.observers) {
+            c.update(addr);
+        }
+    }
+
+    //////////
+
     // Getters
 
-    public List<User> getRemoteUsers() {
+    public List<RemoteUser> getRemoteUsers() {
         return this.myConfig.getRemoteUsers();
     }
+
+    //////////
 
     // Setters
 
     public void setPseudo(String newPseudo) {
         this.myConfig.setPseudo(newPseudo);
     }
+
+    //////////
 }

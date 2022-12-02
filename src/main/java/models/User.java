@@ -12,6 +12,10 @@ public class User {
         this.addr = addr;
     }
 
+    public User() {
+
+    }
+
     public String getPseudo() {
         return pseudo;
     }
@@ -26,5 +30,13 @@ public class User {
                 "pseudo='" + pseudo + '\'' +
                 ", addr=" + addr +
                 '}';
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
+
+    public void setAddr(InetAddress addr) {
+        this.addr = addr;
     }
 }

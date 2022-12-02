@@ -16,7 +16,7 @@ public class Main {
         String pseudo = sc.next();
 
         myService.setPseudo(pseudo);
-        myService.serviceSendConnect();
+        myService.serviceSendSetup();
 
         System.out.println("connected");
 

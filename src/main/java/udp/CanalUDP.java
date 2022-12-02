@@ -1,10 +1,7 @@
 package udp;
 
 import metiers.Service;
-import models.Message;
-import models.MessageConnect;
-import models.MessageConnectAck;
-import models.MessageDisconnect;
+import models.*;
 import observers.CanalObservable;
 
 import java.io.IOException;
@@ -20,6 +17,8 @@ public class CanalUDP implements CanalObservable {
     private InetAddress broadcast;
     private int portUDP;
 
+    private String localAddr;
+
     // Test attributes
     private List<Message> bufferMessagesRecv = new ArrayList<Message>();
 
@@ -29,6 +28,16 @@ public class CanalUDP implements CanalObservable {
         this.UDPServ = new UDPServer(this);
         this.UDPServ.start();
         this.UDPClient = new UDPSender();
+    }
+
+    public void sendSetup(String id) throws IOException {
+        MessageSetup message = new MessageSetup(id);
+        this.UDPClient.send(message, this.broadcast, this.portUDP);
+    }
+
+    public void sendSetupAck(String pseudo, InetAddress addr) throws IOException {
+        MessageSetupAck message = new MessageSetupAck(pseudo);
+        this.UDPClient.send(message, addr, this.portUDP);
     }
 
     public void sendConnect(String pseudo) throws IOException {
@@ -52,7 +61,17 @@ public class CanalUDP implements CanalObservable {
 
         this.bufferMessagesRecv.add(m);
 
-        if (!m.getSource().getHostAddress().equals(InetAddress.getLocalHost().getHostAddress())) {
+        System.out.println("1");
+        if (!m.getSource().getHostAddress().equals(this.localAddr)) {
+
+            System.out.println("2");
+            if (m instanceof MessageSetup) {
+                this.notifyMessageSetup((MessageSetup) m);
+            }
+
+            if (m instanceof MessageSetupAck) {
+                this.notifyMessageSetupAck((MessageSetupAck) m);
+            }
 
             if (m instanceof MessageConnect) {
                 this.notifyMessageConnect((MessageConnect) m);
@@ -82,6 +101,20 @@ public class CanalUDP implements CanalObservable {
     }
 
     @Override
+    public void notifyMessageSetup(MessageSetup m) throws IOException {
+        for (Service observer : this.observers) {
+            observer.processMessageSetup(m);
+        }
+    }
+
+    @Override
+    public void notifyMessageSetupAck(MessageSetupAck m) throws IOException {
+        for (Service observer : this.observers) {
+            observer.processMessageSetupAck(m);
+        }
+    }
+
+    @Override
     public void notifyMessageConnect(MessageConnect m) throws IOException {
         for (Service observer : this.observers) {
             observer.processMessageConnect(m);
@@ -100,6 +133,12 @@ public class CanalUDP implements CanalObservable {
         for (Service observer : this.observers) {
             observer.processMessageDisconnect(m);
         }
+    }
+
+    // Observer
+    @Override
+    public void update(String addr) {
+        this.localAddr = addr;
     }
 
     // Test function
