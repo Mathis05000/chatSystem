@@ -1,4 +1,5 @@
 import metiers.Service;
+import models.Session;
 import models.User;
 
 import java.io.IOException;
@@ -32,7 +33,18 @@ public class Main {
             System.out.println(user);
         }
 
+        String opt = sc.next();
 
+        if (opt.equals("c")) {
+            Session session = new Session(myService.getRemoteUsers().get(0));
+            myService.serviceSendSession(session);
+            System.out.println("session create " + session.getId());
+        }
 
+        else if (opt.equals("a")) {
+            for (Session session : myService.getSessions()) {
+                System.out.println(session.getId());
+            }
+        }
     }
 }

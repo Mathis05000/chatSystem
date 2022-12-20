@@ -19,6 +19,7 @@ public interface CanalUDPObservable {
     void notifyMessageConnect(MessageConnect m) throws IOException;
     void notifyMessageConnectAck(MessageConnectAck m);
     void notifyMessageDisconnect(MessageDisconnect m);
+    void notifyMessageSession(MessageSession m);
 
     // Observer
 

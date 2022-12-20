@@ -20,7 +20,6 @@ public class TCPServer extends Thread {
 
     private Message TCPRecv() throws IOException, ClassNotFoundException {
         Socket link = servSocket.accept();
-
         ObjectInputStream inputStream = new ObjectInputStream(link.getInputStream());
         MessageChat message = (MessageChat) inputStream.readObject();
 

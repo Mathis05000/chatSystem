@@ -2,6 +2,7 @@ package metiers;
 
 import models.LocalUser;
 import models.RemoteUser;
+import models.Session;
 import models.User;
 
 import java.net.InetAddress;
@@ -12,8 +13,11 @@ import java.util.UUID;
 class Config {
 
     private LocalUser myUser = new LocalUser();
-    private List<RemoteUser> remoteUsers = new ArrayList<RemoteUser>();
     private String idSetup = UUID.randomUUID().toString();
+
+    private List<Session> sessions =  new ArrayList<Session>();
+    private List<RemoteUser> remoteUsers = new ArrayList<RemoteUser>();
+
 
     private List<String> reservedPseudos = new ArrayList<String>();
 
@@ -59,6 +63,15 @@ class Config {
         }
     }
 
+    public RemoteUser getUserByAddr(InetAddress addr) {
+        for (RemoteUser user : this.remoteUsers) {
+            if (user.getAddr().getHostAddress().equals(addr.getHostAddress())) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     public List<RemoteUser> getRemoteUsers() {
         return this.remoteUsers;
     }
@@ -81,5 +94,13 @@ class Config {
 
     public void setConnected(boolean connected) {
         this.connected = connected;
+    }
+
+    public List<Session> getSessions() {
+        return sessions;
+    }
+
+    public void addSession(Session session) {
+        this.sessions.add(session);
     }
 }

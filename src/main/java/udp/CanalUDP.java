@@ -54,6 +54,11 @@ public class CanalUDP implements CanalUDPObservable {
         this.UDPClient.send(message, this.broadcast, this.portUDP);
     }
 
+    public void sendSession(String id, InetAddress addr) throws IOException {
+        MessageSession message = new MessageSession(id);
+        this.UDPClient.send(message, addr, this.portUDP);
+    }
+
     void messageHandler(Message o) throws IOException {
 
         Message m = (Message) o;
@@ -80,6 +85,10 @@ public class CanalUDP implements CanalUDPObservable {
 
             if (m instanceof MessageDisconnect) {
                 this.notifyMessageDisconnect((MessageDisconnect) m);
+            }
+
+            if (m instanceof MessageSession) {
+                this.notifyMessageSession((MessageSession) m);
             }
         }
     }
@@ -129,6 +138,13 @@ public class CanalUDP implements CanalUDPObservable {
     public void notifyMessageDisconnect(MessageDisconnect m) {
         for (Service observer : this.observers) {
             observer.processMessageDisconnect(m);
+        }
+    }
+
+    @Override
+    public void notifyMessageSession(MessageSession m) {
+        for (Service observer : this.observers) {
+            observer.processMessageSession(m);
         }
     }
 

@@ -40,7 +40,11 @@ public class Service implements CanalUDPObserver, CanalTCPObserver {
 
     public void serviceSendDisconnect() throws IOException {
         this.myCanalUDP.sendDisconnect(this.myConfig.getPseudo());
-        this.myConfig.setConnected(true);
+        this.myConfig.setConnected(false);
+    }
+
+    public void serviceSendSession(Session session) throws IOException {
+        this.myCanalUDP.sendSession(session.getId(), session.getUser().getAddr());
     }
     ///////////
 
@@ -83,6 +87,21 @@ public class Service implements CanalUDPObserver, CanalTCPObserver {
         this.myConfig.delRemoteUser(message.getSource());
     }
 
+    @Override
+    public void processMessageSession(MessageSession message) {
+        RemoteUser user = this.myConfig.getUserByAddr(message.getSource());
+        this.myConfig.addSession(new Session(user, message.getData()));
+    }
+
+    @Override
+    public void processMessageChat(MessageChat message) throws IOException {
+        for (Session session : this.myConfig.getSessions()) {
+            if (session.getId().equals(message.getIdSession())) {
+                session.addMessage(message);
+            }
+        }
+    }
+
     //////////
 
     // Observable
@@ -123,8 +142,13 @@ public class Service implements CanalUDPObserver, CanalTCPObserver {
         return this.myConfig.getAddr();
     }
 
-    @Override
-    public void processMessageChat(MessageSetup message) throws IOException {
-
+    public List<RemoteUser> getUsers() {
+        return this.myConfig.getRemoteUsers();
     }
+
+    public List<Session> getSessions() {
+        return this.myConfig.getSessions();
+    }
+
+
 }
