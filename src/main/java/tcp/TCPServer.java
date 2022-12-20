@@ -13,7 +13,7 @@ public class TCPServer extends Thread {
     private ServerSocket servSocket;
     private CanalTCP myCanalTCP;
 
-    public TCPServer(CanalTCP canalTCP) throws IOException {
+    public TCPServer(Session session) throws IOException {
         this.myCanalTCP = canalTCP;
         this.servSocket = new ServerSocket(this.myCanalTCP.getPortTCP());
     }
