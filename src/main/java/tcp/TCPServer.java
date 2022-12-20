@@ -2,6 +2,7 @@ package tcp;
 
 import models.Message;
 import models.MessageChat;
+import models.Session;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,27 +14,24 @@ public class TCPServer extends Thread {
     private ServerSocket servSocket;
     private CanalTCP myCanalTCP;
 
-    public TCPServer(Session session) throws IOException {
+    public TCPServer(CanalTCP canalTCP) throws IOException {
         this.myCanalTCP = canalTCP;
         this.servSocket = new ServerSocket(this.myCanalTCP.getPortTCP());
     }
 
-    private Message TCPRecv() throws IOException, ClassNotFoundException {
+    private void TCPRecv() throws IOException, ClassNotFoundException {
         Socket link = servSocket.accept();
-        ObjectInputStream inputStream = new ObjectInputStream(link.getInputStream());
-        MessageChat message = (MessageChat) inputStream.readObject();
-
-        return message;
+        new TCPThread(link, this.myCanalTCP);
     }
 
     public void run() {
         while(true) {
             try {
-                this.myCanalTCP.messageHandler(this.TCPRecv());
+                this.TCPRecv();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }

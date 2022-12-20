@@ -46,6 +46,10 @@ public class Service implements CanalUDPObserver, CanalTCPObserver {
     public void serviceSendSession(Session session) throws IOException {
         this.myCanalUDP.sendSession(session.getId(), session.getUser().getAddr());
     }
+
+    public void serviceSendChat(MessageChat message, Session session) throws IOException {
+        session.send(message);
+    }
     ///////////
 
     // Observer

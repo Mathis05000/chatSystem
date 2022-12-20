@@ -1,5 +1,8 @@
 package models;
 
+import tcp.TCPSender;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -9,10 +12,12 @@ public class Session {
     private String id;
     private List<MessageChat> messages = new ArrayList<MessageChat>();
     private RemoteUser user;
+    private TCPSender myTCPSender;
 
-    public Session(RemoteUser user) {
+    public Session(RemoteUser user) throws IOException {
         this.id = UUID.randomUUID().toString();
         this.user = user;
+        this.myTCPSender = new TCPSender(this.user);
     }
 
     public Session(RemoteUser user, String id) {
@@ -30,5 +35,9 @@ public class Session {
 
     public RemoteUser getUser() {
         return user;
+    }
+
+    public void send(MessageChat message) throws IOException {
+        this.myTCPSender.send(message);
     }
 }
