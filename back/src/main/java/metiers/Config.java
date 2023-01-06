@@ -1,9 +1,6 @@
 package metiers;
 
-import models.LocalUser;
-import models.RemoteUser;
-import models.Session;
-import models.User;
+import models.*;
 import commun.ConfigObservable;
 import commun.ConfigObserver;
 
@@ -26,13 +23,19 @@ class Config implements ConfigObservable {
 
         connected = false;
         // Mocks
-        /*RemoteUser user1 = new RemoteUser("thomas", null);
+        RemoteUser user1 = new RemoteUser("thomas", null);
         RemoteUser user2 = new RemoteUser("basile", null);
         remoteUsers.add(user1);
         remoteUsers.add(user2);
 
-        sessions.add(new Session(user1));
-        sessions.add(new Session(user2));*/
+        Session session1 = new Session(user1);
+        Session session2 = new Session(user2);
+        session1.addMessage(new MessageChat("salut session 1"));
+        session1.addMessage(new MessageChat("ça va 1 ?"));
+        session2.addMessage(new MessageChat("salut session 2"));
+        session2.addMessage(new MessageChat("ça va 2 ?"));
+        sessions.add(session1);
+        sessions.add(session2);
         //
     }
 
