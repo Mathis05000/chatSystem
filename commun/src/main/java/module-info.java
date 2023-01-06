@@ -1,0 +1,3 @@
+module commun {
+    exports commun;
+}
