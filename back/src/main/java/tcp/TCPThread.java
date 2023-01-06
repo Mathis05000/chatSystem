@@ -17,6 +17,7 @@ public class TCPThread extends Thread {
     }
 
     private Message TCPRecv() throws IOException, ClassNotFoundException {
+        System.out.println("recv");
         ObjectInputStream inputStream = new ObjectInputStream(link.getInputStream());
         MessageChat message = (MessageChat) inputStream.readObject();
 

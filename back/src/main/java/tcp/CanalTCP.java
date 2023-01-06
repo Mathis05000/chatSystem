@@ -14,6 +14,7 @@ public class CanalTCP implements CanalTCPObservable {
 
     public CanalTCP() throws IOException {
         this.TCPServer = new TCPServer(this);
+        this.TCPServer.start();
     }
 
     public int getPortTCP() {

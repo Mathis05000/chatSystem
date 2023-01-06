@@ -11,6 +11,7 @@ public class TCPSender {
 
     private Socket link;
     public TCPSender(RemoteUser user) throws IOException {
+        System.out.println("send link");
         this.link = new Socket(user.getAddr(), 15000);
     }
 

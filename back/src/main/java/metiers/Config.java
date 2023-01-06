@@ -26,13 +26,13 @@ class Config implements ConfigObservable {
 
         connected = false;
         // Mocks
-        RemoteUser user1 = new RemoteUser("thomas", null);
+        /*RemoteUser user1 = new RemoteUser("thomas", null);
         RemoteUser user2 = new RemoteUser("basile", null);
         remoteUsers.add(user1);
         remoteUsers.add(user2);
 
         sessions.add(new Session(user1));
-        sessions.add(new Session(user2));
+        sessions.add(new Session(user2));*/
         //
     }
 

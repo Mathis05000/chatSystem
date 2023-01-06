@@ -3,6 +3,7 @@ package metiers;
 import models.*;
 import observers.CanalTCPObserver;
 import commun.ConfigObserver;
+import tcp.CanalTCP;
 import udp.CanalUDP;
 import observers.CanalUDPObserver;
 
@@ -13,14 +14,18 @@ import java.util.List;
 public class Service implements CanalUDPObserver, CanalTCPObserver {
 
     private CanalUDP myCanalUDP;
+    private CanalTCP myCanalTCP;
     private Config myConfig;
 
     public Service() throws IOException {
         this.myCanalUDP = new CanalUDP();
+        this.myCanalTCP = new CanalTCP();
 
         // Observers
         this.myCanalUDP.subscribe(this);
         this.subscribe(this.myCanalUDP);
+
+        this.myCanalTCP.subscribe(this);
         //
 
         this.myConfig = new Config();
@@ -42,10 +47,12 @@ public class Service implements CanalUDPObserver, CanalTCPObserver {
     }
 
     public void serviceSendSession(Session session) throws IOException {
+        this.myConfig.addSession(session);
         this.myCanalUDP.sendSession(session.getId(), session.getUser().getAddr());
     }
 
     public void serviceSendChat(MessageChat message, Session session) throws IOException {
+        message.setIdSession(session.getId());
         session.send(message);
     }
     ///////////

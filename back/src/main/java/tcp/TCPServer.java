@@ -21,7 +21,8 @@ public class TCPServer extends Thread {
 
     private void TCPRecv() throws IOException, ClassNotFoundException {
         Socket link = servSocket.accept();
-        new TCPThread(link, this.myCanalTCP);
+        (new TCPThread(link, this.myCanalTCP)).start();
+
     }
 
     public void run() {

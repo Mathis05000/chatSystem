@@ -17,7 +17,7 @@ public class Session {
     public Session(RemoteUser user) throws IOException {
         this.id = UUID.randomUUID().toString();
         this.user = user;
-        //this.myTCPSender = new TCPSender(this.user);
+        this.myTCPSender = new TCPSender(this.user);
     }
 
     public Session(RemoteUser user, String id) {
@@ -39,5 +39,9 @@ public class Session {
 
     public void send(MessageChat message) throws IOException {
         this.myTCPSender.send(message);
+    }
+
+    public List<MessageChat> getMessages() {
+        return messages;
     }
 }
