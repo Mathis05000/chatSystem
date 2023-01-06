@@ -1,5 +1,7 @@
 package metiers;
 
+import commun.MessageObservable;
+import commun.MessageObserver;
 import models.*;
 import observers.CanalTCPObserver;
 import commun.ConfigObserver;
@@ -11,7 +13,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
-public class Service implements CanalUDPObserver, CanalTCPObserver {
+public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObservable {
 
     private CanalUDP myCanalUDP;
     private CanalTCP myCanalTCP;
@@ -52,7 +54,6 @@ public class Service implements CanalUDPObserver, CanalTCPObserver {
     }
 
     public void serviceSendChat(MessageChat message, Session session) throws IOException {
-        message.setIdSession(session.getId());
         session.send(message);
     }
     ///////////
@@ -107,6 +108,7 @@ public class Service implements CanalUDPObserver, CanalTCPObserver {
         for (Session session : this.myConfig.getSessions()) {
             if (session.getId().equals(message.getIdSession())) {
                 session.addMessage(message);
+                this.notifyChangeMessage(session.getId());
             }
         }
     }
@@ -152,15 +154,30 @@ public class Service implements CanalUDPObserver, CanalTCPObserver {
     public void addSession(Session session) {
         this.myConfig.addSession(session);
     }
-    public void subscribe(ConfigObserver observer) {
+    public void subscribeConfig(ConfigObserver observer) {
         this.myConfig.subscribe(observer);
     }
 
+
     //////////
+
+
 
     // Test methodes
 
     public InetAddress getAddr() {
         return this.myConfig.getAddr();
+    }
+
+    @Override
+    public void subscribe(MessageObserver observer) {
+        this.messageObservers.add(observer);
+    }
+
+    @Override
+    public void notifyChangeMessage(String id) {
+        for (MessageObserver observer : this.messageObservers) {
+            observer.updateMessage(id);
+        }
     }
 }

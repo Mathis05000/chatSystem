@@ -1,5 +1,7 @@
 package models;
 
+import commun.MessageObservable;
+import commun.MessageObserver;
 import tcp.TCPSender;
 
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class Session {
     public Session(RemoteUser user) throws IOException {
         this.id = UUID.randomUUID().toString();
         this.user = user;
-        //this.myTCPSender = new TCPSender(this.user);
+        this.myTCPSender = new TCPSender(this.user);
     }
 
     public Session(RemoteUser user, String id) {
@@ -38,6 +40,8 @@ public class Session {
     }
 
     public void send(MessageChat message) throws IOException {
+        message.setIdSession(this.id);
+        this.messages.add(message);
         this.myTCPSender.send(message);
     }
 
