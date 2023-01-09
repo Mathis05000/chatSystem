@@ -19,7 +19,7 @@ public class Session {
     public Session(RemoteUser user) throws IOException {
         this.id = UUID.randomUUID().toString();
         this.user = user;
-        //this.myTCPSender = new TCPSender(this.user);
+        this.myTCPSender = new TCPSender(this.user);
     }
 
     public Session(RemoteUser user, String id) {

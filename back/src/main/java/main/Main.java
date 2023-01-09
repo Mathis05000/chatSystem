@@ -1,4 +1,5 @@
-package metiers;
+package main;
+
 
 import metiers.Service;
 import models.MessageChat;

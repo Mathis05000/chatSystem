@@ -23,7 +23,7 @@ class Config implements ConfigObservable {
 
         connected = false;
         // Mocks
-        RemoteUser user1 = new RemoteUser("thomas", null);
+        /*RemoteUser user1 = new RemoteUser("thomas", null);
         RemoteUser user2 = new RemoteUser("basile", null);
         remoteUsers.add(user1);
         remoteUsers.add(user2);
@@ -35,7 +35,7 @@ class Config implements ConfigObservable {
         session2.addMessage(new MessageChat("salut session 2"));
         session2.addMessage(new MessageChat("ça va 2 ?"));
         sessions.add(session1);
-        sessions.add(session2);
+        sessions.add(session2);*/
         //
     }
 

@@ -133,6 +133,13 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
         }
         return null;
     }
+
+    @Override
+    public void updateMessage(String id) {
+        if (this.selectedSession.getId().equals(id)) {
+            this.updateConversation();
+        }
+    }
     // test
 
     public void addSession() throws IOException {
@@ -144,10 +151,5 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
         System.out.println(this.observableListSession.size());
     }
 
-    @Override
-    public void updateMessage(String id) {
-        if (this.selectedSession.getId().equals(id)) {
-            this.updateConversation();
-        }
-    }
+
 }
