@@ -3,4 +3,5 @@ module back {
     exports models;
 
     requires commun;
+    requires java.sql;
 }

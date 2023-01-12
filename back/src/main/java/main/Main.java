@@ -1,19 +1,21 @@
 package main;
 
 
+import db.DB;
 import metiers.Service;
 import models.MessageChat;
 import models.RemoteUser;
 import models.Session;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
 
-        System.out.println("last version");
+        /*System.out.println("last version");
         Scanner sc = new Scanner(System.in);
         Service service = new Service();
 
@@ -51,6 +53,8 @@ public class Main {
 
         if (tmp.equals("r")) {
             System.out.println(service.getSessions().get(0).getMessages().get(0).getData());
-        }
+        }*/
+
+        DB db = new DB();
     }
 }
