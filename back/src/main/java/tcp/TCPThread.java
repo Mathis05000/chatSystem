@@ -17,21 +17,23 @@ public class TCPThread extends Thread {
     }
 
     private Message TCPRecv() throws IOException, ClassNotFoundException {
-        System.out.println("recv");
+
         ObjectInputStream inputStream = new ObjectInputStream(link.getInputStream());
         MessageChat message = (MessageChat) inputStream.readObject();
+        message.setSource(link.getInetAddress());
 
         return message;
     }
 
     public void run() {
-        try {
-            this.myCanalTCP.messageHandler(this.TCPRecv());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        while (true) {
+            try {
+                this.myCanalTCP.messageHandler(this.TCPRecv());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
-
 }

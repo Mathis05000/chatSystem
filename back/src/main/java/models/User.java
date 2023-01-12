@@ -26,10 +26,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "pseudo='" + pseudo + '\'' +
-                ", addr=" + addr +
-                '}';
+        return pseudo;
     }
 
     public void setPseudo(String pseudo) {
@@ -39,4 +36,5 @@ public class User {
     public void setAddr(InetAddress addr) {
         this.addr = addr;
     }
+
 }

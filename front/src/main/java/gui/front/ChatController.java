@@ -1,12 +1,14 @@
 package gui.front;
 
 import commun.MessageObserver;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import metiers.Service;
 import models.MessageChat;
@@ -16,6 +18,7 @@ import commun.ConfigObserver;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -43,17 +46,22 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
 
 
     public ChatController() throws IOException {
-        this.service = new Service();
+
+    }
+
+    public void setService(Service service) throws IOException {
+        this.service = service;
         this.service.subscribeConfig(this);
         this.service.subscribe(this);
+        this.service.serviceSendConnect();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Initialize Remote User List and Session List
-        this.updateListRemoteUsers();
-        this.updateListSession();
+        /*this.updateListRemoteUsers();
+        this.updateListSession();*/
 
         // Session selected on this.selectedSession
         this.listSession.setOnMouseClicked(event -> {
@@ -69,16 +77,16 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
 
             if (session == null) {
                 try {
-                    this.service.serviceSendSession(new Session(user));
+                    session = new Session(user);
+
+                    this.service.serviceSendSession(session);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
-
-            else {
-                this.selectedSession = session;
-                this.updateConversation();
-            }
+            this.selectedSession = session;
+            this.updateConversation();
+            this.listSession.getSelectionModel().select(session);
         });
     }
 
@@ -87,26 +95,41 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
     }
 
     public void onSendMessage() throws IOException {
+        System.out.println("test : " + this.selectedSession);
         this.selectedSession.send(new MessageChat(input_text.getText()));
+        this.input_text.clear();
+        this.updateConversation();
     }
 
     public void updateConversation() {
-        this.conversation.getChildren().clear();
-        for (MessageChat message : this.selectedSession.getMessages()) {
-            Label label = new Label(message.getData());
-            label.setMaxWidth(Double.MAX_VALUE);
-            if (message.getSource() == null) {
+        Platform.runLater(() -> {
+
+            this.conversation.getChildren().clear();
+
+            SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+            for (MessageChat message : this.selectedSession.getMessages()) {
+                Label label = new Label(message.getData());
+                Label meta;
+                label.setMaxWidth(Double.MAX_VALUE);
+                System.out.println("src : " + message.getSource());
+                if (message.getSource() == null) {
+                    meta = new Label(s.format(message.getDate()) + " vous : ");
+                }
+                else {
+                    meta = new Label(s.format(message.getDate()) + " " + this.selectedSession.getUser().getPseudo() + " : ");
+                }
                 label.setAlignment(Pos.BASELINE_RIGHT);
+                HBox box = new HBox();
+                box.getChildren().addAll(meta, label);
+                this.conversation.getChildren().add(box);
             }
-            else {
-                label.setAlignment(Pos.BASELINE_LEFT);
-            }
-            this.conversation.getChildren().add(label);
-        }
+        });
     }
 
     @Override
     public void updateListRemoteUsers() {
+        System.out.println(service.getRemoteUsers().size());
         this.observableListRemoteUsers = FXCollections.observableList(service.getRemoteUsers());
         this.listUser.setItems(this.observableListRemoteUsers);
         System.out.println("listener");
@@ -136,10 +159,14 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
 
     @Override
     public void updateMessage(String id) {
-        if (this.selectedSession.getId().equals(id)) {
-            this.updateConversation();
+        if (this.selectedSession != null) {
+            if (this.selectedSession.getId().equals(id)) {
+                this.updateConversation();
+            }
         }
+
     }
+
     // test
 
     public void addSession() throws IOException {
@@ -149,6 +176,10 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
         this.service.addSession(new Session(user));
         System.out.println("addSession");
         System.out.println(this.observableListSession.size());
+    }
+
+    public void printUsers() {
+        System.out.println(this.service.getRemoteUsers().size());
     }
 
 

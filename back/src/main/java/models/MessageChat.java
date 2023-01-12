@@ -19,4 +19,8 @@ public class MessageChat extends Message {
     public void setIdSession(String id) {
         this.idSession = id;
     }
+
+    public Date getDate() {
+        return date;
+    }
 }

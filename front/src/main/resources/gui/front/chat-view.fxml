@@ -35,7 +35,7 @@
         </tabs>
       </TabPane>
       <Label fx:id="label" layoutX="524.0" layoutY="8.0" prefHeight="34.0" prefWidth="70.0" text="Label" />
-      <Button fx:id="ok" layoutX="458.0" layoutY="12.0" mnemonicParsing="false" onAction="#addSession" text="Button" />
+      <Button fx:id="ok" layoutX="458.0" layoutY="12.0" mnemonicParsing="false" onAction="#printUsers" text="Button" />
       <VBox layoutX="216.0" layoutY="54.0" prefHeight="363.0" prefWidth="372.0">
          <children>
             <AnchorPane prefHeight="343.0" prefWidth="372.0">

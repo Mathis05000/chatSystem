@@ -15,7 +15,7 @@ public interface CanalUDPObserver {
     void processMessageConnect(MessageConnect message) throws IOException;
     void processMessageConnectAck(MessageConnectAck message);
     void processMessageDisconnect(MessageDisconnect message);
-    void processMessageSession(MessageSession message);
+    void processMessageSession(MessageSession message) throws IOException;
 
     // Observable
 

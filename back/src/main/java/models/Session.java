@@ -22,9 +22,10 @@ public class Session {
         this.myTCPSender = new TCPSender(this.user);
     }
 
-    public Session(RemoteUser user, String id) {
+    public Session(RemoteUser user, String id) throws IOException {
         this.id = id;
         this.user = user;
+        this.myTCPSender = new TCPSender(this.user);
     }
 
     public String getId() {
@@ -47,5 +48,10 @@ public class Session {
 
     public List<MessageChat> getMessages() {
         return messages;
+    }
+
+    @Override
+    public String toString() {
+        return user.getPseudo();
     }
 }

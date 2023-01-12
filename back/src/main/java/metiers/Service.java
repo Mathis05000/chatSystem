@@ -98,13 +98,14 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
     }
 
     @Override
-    public void processMessageSession(MessageSession message) {
+    public void processMessageSession(MessageSession message) throws IOException {
         RemoteUser user = this.myConfig.getUserByAddr(message.getSource());
         this.myConfig.addSession(new Session(user, message.getData()));
     }
 
     @Override
     public void processMessageChat(MessageChat message) throws IOException {
+        System.out.println("msg recv");
         for (Session session : this.myConfig.getSessions()) {
             if (session.getId().equals(message.getIdSession())) {
                 session.addMessage(message);

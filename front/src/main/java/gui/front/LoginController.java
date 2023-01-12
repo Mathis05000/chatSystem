@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import metiers.Service;
 
 import java.io.IOException;
 
@@ -17,13 +18,21 @@ public class LoginController {
     private Parent root;
     private Stage stage;
     private Scene scene;
+    private Service service;
+
+    public LoginController() throws IOException {
+        this.service = new Service();
+        this.service.serviceSendSetup();
+    }
 
     public void login(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("chat-view.fxml"));
         root = loader.load();
 
         ChatController controller = loader.getController();
-        controller.updatePseudo(pseudo.getText());
+
+        this.service.setPseudo(pseudo.getText());
+        controller.setService(this.service);
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);

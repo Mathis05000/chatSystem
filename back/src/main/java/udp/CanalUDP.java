@@ -142,7 +142,7 @@ public class CanalUDP implements CanalUDPObservable {
     }
 
     @Override
-    public void notifyMessageSession(MessageSession m) {
+    public void notifyMessageSession(MessageSession m) throws IOException {
         for (Service observer : this.observers) {
             observer.processMessageSession(m);
         }
