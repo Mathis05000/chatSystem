@@ -161,6 +161,10 @@ class Config implements ConfigObservable {
         this.notifyChangeSessions();
     }
 
+    public boolean checkPseudo(String pseudo) {
+        return this.reservedPseudos.contains(pseudo);
+    }
+
     @Override
     public void subscribe(ConfigObserver observer) {
         System.out.println("subscribe : " + observer);

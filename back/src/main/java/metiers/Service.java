@@ -147,8 +147,13 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
 
     // Setters
 
-    public void setPseudo(String newPseudo) {
+    public boolean setPseudo(String newPseudo) {
+
+        if (this.checkPseudo(newPseudo) == false) {
+            return false;
+        }
         this.myConfig.setPseudo(newPseudo);
+        return true;
     }
     public void addRemoteUser(RemoteUser user) {
         this.myConfig.addRemoteUser(user);
@@ -157,20 +162,17 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
     public void addSession(Session session) throws SQLException {
         this.myConfig.addSession(session);
     }
+
+    public boolean checkPseudo(String pseudo) {
+        return this.myConfig.checkPseudo(pseudo);
+    }
+
     public void subscribeConfig(ConfigObserver observer) {
         this.myConfig.subscribe(observer);
     }
 
 
     //////////
-
-
-
-    // Test methodes
-
-    public InetAddress getAddr() {
-        return this.myConfig.getAddr();
-    }
 
     @Override
     public void subscribe(MessageObserver observer) {
