@@ -1,10 +1,14 @@
-package models;
+package session;
 
 import commun.MessageObservable;
 import commun.MessageObserver;
+import db.DB;
+import models.MessageChat;
+import models.RemoteUser;
 import tcp.TCPSender;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,12 +32,26 @@ public class Session {
         this.myTCPSender = new TCPSender(this.user);
     }
 
+    public Session(RemoteUser user, String id, List<MessageChat> messages) throws IOException {
+        this.id = id;
+        this.user = user;
+        this.messages = messages;
+        this.myTCPSender = new TCPSender(this.user);
+    }
+
     public String getId() {
         return id;
     }
 
     public void addMessage(MessageChat message) {
         this.messages.add(message);
+
+        // add Message to Database
+        try {
+            DB.getInstance().insertMessage(message);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public RemoteUser getUser() {

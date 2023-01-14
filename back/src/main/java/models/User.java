@@ -1,6 +1,7 @@
 package models;
 
 import java.net.InetAddress;
+import java.util.Objects;
 
 public class User {
 
@@ -36,5 +37,4 @@ public class User {
     public void setAddr(InetAddress addr) {
         this.addr = addr;
     }
-
 }

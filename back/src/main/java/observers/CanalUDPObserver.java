@@ -4,6 +4,7 @@ import models.*;
 import udp.CanalUDP;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface CanalUDPObserver {
     void processMessageConnect(MessageConnect message) throws IOException;
     void processMessageConnectAck(MessageConnectAck message);
     void processMessageDisconnect(MessageDisconnect message);
-    void processMessageSession(MessageSession message) throws IOException;
+    void processMessageSession(MessageSession message) throws IOException, SQLException;
 
     // Observable
 

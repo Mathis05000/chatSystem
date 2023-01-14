@@ -12,6 +12,12 @@ public class MessageChat extends Message {
         this.date = new Date();
     }
 
+    public MessageChat(String data, String idSession, Date date) {
+        super(data);
+        this.date = date;
+        this.idSession = idSession;
+    }
+
     public String getIdSession() {
         return idSession;
     }

@@ -35,6 +35,14 @@ public class LoginController {
         controller.setService(this.service);
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        stage.setOnCloseRequest(e -> {
+            try {
+                this.service.serviceSendDisconnect();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

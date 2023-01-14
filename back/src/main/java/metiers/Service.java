@@ -5,12 +5,14 @@ import commun.MessageObserver;
 import models.*;
 import observers.CanalTCPObserver;
 import commun.ConfigObserver;
+import session.Session;
 import tcp.CanalTCP;
 import udp.CanalUDP;
 import observers.CanalUDPObserver;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObservable {
@@ -98,7 +100,7 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
     }
 
     @Override
-    public void processMessageSession(MessageSession message) throws IOException {
+    public void processMessageSession(MessageSession message) throws IOException{
         RemoteUser user = this.myConfig.getUserByAddr(message.getSource());
         this.myConfig.addSession(new Session(user, message.getData()));
     }
@@ -152,7 +154,7 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
         this.myConfig.addRemoteUser(user);
     }
 
-    public void addSession(Session session) {
+    public void addSession(Session session) throws SQLException {
         this.myConfig.addSession(session);
     }
     public void subscribeConfig(ConfigObserver observer) {

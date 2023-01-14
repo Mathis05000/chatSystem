@@ -10,16 +10,17 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import metiers.Service;
 import models.MessageChat;
 import models.RemoteUser;
-import models.Session;
+import session.Session;
 import commun.ConfigObserver;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChatController implements Initializable, ConfigObserver, MessageObserver {
@@ -59,11 +60,6 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // Initialize Remote User List and Session List
-        /*this.updateListRemoteUsers();
-        this.updateListSession();*/
-
-        // Session selected on this.selectedSession
         this.listSession.setOnMouseClicked(event -> {
             Session session = (Session) listSession.getSelectionModel().getSelectedItem();
             this.selectedSession = session;
@@ -169,7 +165,7 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
 
     // test
 
-    public void addSession() throws IOException {
+    public void addSession() throws IOException, SQLException {
         System.out.println(this.observableListSession.size());
         RemoteUser user = new RemoteUser("rocky", null);
         this.service.addRemoteUser(user);

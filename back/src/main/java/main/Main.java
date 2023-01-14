@@ -2,14 +2,9 @@ package main;
 
 
 import db.DB;
-import metiers.Service;
-import models.MessageChat;
-import models.RemoteUser;
-import models.Session;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class Main {
 
