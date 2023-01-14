@@ -24,7 +24,7 @@ public class DBSession {
 
     public void getSession(String pseudo) throws SQLException {
         Statement statement = this.connection.createStatement();
-        ResultSet result = statement.executeQuery("select * from Session where pseudo = '" + pseudo +"'");
+        ResultSet result = statement.executeQuery("select * from Session, Message where pseudo = '" + pseudo +"'");
 
 
         statement.close();
