@@ -1,7 +1,7 @@
 package main;
 
 
-import db.DB;
+import db.DAO;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -50,6 +50,5 @@ public class Main {
             System.out.println(service.getSessions().get(0).getMessages().get(0).getData());
         }*/
 
-        DB db = new DB();
     }
 }

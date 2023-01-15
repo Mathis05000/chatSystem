@@ -142,6 +142,9 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
     public List<Session> getSessions() {
         return this.myConfig.getSessions();
     }
+    public String getLocalAddr() {
+        return this.myConfig.getAddr().getHostAddress();
+    }
 
     //////////
 

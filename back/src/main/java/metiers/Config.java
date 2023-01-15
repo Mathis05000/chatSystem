@@ -1,6 +1,6 @@
 package metiers;
 
-import db.DB;
+import db.DAO;
 import models.*;
 import commun.ConfigObservable;
 import commun.ConfigObserver;
@@ -69,9 +69,9 @@ class Config implements ConfigObservable {
 
         // Load bind session if exist
         try {
-            String idSession = DB.getInstance().getSession(user);
+            String idSession = DAO.getInstance().getSession(user);
             if (idSession != null) {
-                List<MessageChat> messages = DB.getInstance().getMessages(idSession);
+                List<MessageChat> messages = DAO.getInstance().getMessages(idSession);
                 this.addStoredSession(new Session(user, idSession, messages));
             }
         } catch (SQLException e) {
@@ -139,7 +139,7 @@ class Config implements ConfigObservable {
 
         // add session to Database
         try {
-            DB.getInstance().insertSession(session);
+            DAO.getInstance().insertSession(session);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

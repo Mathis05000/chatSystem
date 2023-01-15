@@ -10,38 +10,31 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DB {
+public class DAO {
 
+    private static final DAO INSTANCE = new DAO();
     private Connection connection;
-
-    private DB() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:sqlite:chat.db");
-        Statement statement = connection.createStatement();
-
-        ResultSet rs = statement.executeQuery("SELECT * FROM sqlite_schema WHERE name = 'Session';");
-        if (!rs.next()) {
-            statement.executeUpdate("create table session (id string, pseudo string)");
-        }
-
-        rs = statement.executeQuery("SELECT * FROM sqlite_schema WHERE name = 'Message';");
-        if (!rs.next()) {
-            statement.executeUpdate("create table message (id_session string, data string, date Date)");
-        }
-    }
-
-    private static DB INSTANCE;
-
-    static {
+    private DAO() {
         try {
-            INSTANCE = new DB();
+            connection = DriverManager.getConnection("jdbc:sqlite:chat.db");
+            Statement statement = connection.createStatement();
+
+            ResultSet rs = statement.executeQuery("SELECT * FROM sqlite_schema WHERE name = 'Session';");
+            if (!rs.next()) {
+                statement.executeUpdate("create table session (id string, pseudo string)");
+            }
+
+            rs = statement.executeQuery("SELECT * FROM sqlite_schema WHERE name = 'Message';");
+            if (!rs.next()) {
+                statement.executeUpdate("create table message (id_session string, data string, date Date)");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     /** Point d'accès pour l'instance unique du singleton */
-    public static DB getInstance()
-    {
+    public static DAO getInstance() {
         return INSTANCE;
     }
 

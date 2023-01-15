@@ -1,8 +1,6 @@
 package session;
 
-import commun.MessageObservable;
-import commun.MessageObserver;
-import db.DB;
+import db.DAO;
 import models.MessageChat;
 import models.RemoteUser;
 import tcp.TCPSender;
@@ -48,7 +46,7 @@ public class Session {
 
         // add Message to Database
         try {
-            DB.getInstance().insertMessage(message);
+            DAO.getInstance().insertMessage(message);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
