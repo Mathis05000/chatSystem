@@ -7,16 +7,16 @@ import java.net.Socket;
 public class TCPServer extends Thread {
 
     private ServerSocket servSocket;
-    private CanalTCP myCanalTCP;
+    private HandlerTCP myHandlerTCP;
 
-    public TCPServer(CanalTCP canalTCP) throws IOException {
-        this.myCanalTCP = canalTCP;
-        this.servSocket = new ServerSocket(this.myCanalTCP.getPortTCP());
+    public TCPServer(HandlerTCP handlerTCP) throws IOException {
+        this.myHandlerTCP = handlerTCP;
+        this.servSocket = new ServerSocket(this.myHandlerTCP.getPortTCP());
     }
 
     private void TCPRecv() throws IOException, ClassNotFoundException {
         Socket link = servSocket.accept();
-        (new TCPThread(link, this.myCanalTCP)).start();
+        (new TCPThread(link, this.myHandlerTCP)).start();
 
     }
 

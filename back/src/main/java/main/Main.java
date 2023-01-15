@@ -1,7 +1,8 @@
 package main;
 
 
-import db.DAO;
+import factory.Factory;
+import metiers.Service;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -10,6 +11,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException, SQLException {
 
+        Service service = Factory.getService();
+        System.out.println(service);
         /*System.out.println("last version");
         Scanner sc = new Scanner(System.in);
         Service service = new Service();

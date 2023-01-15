@@ -5,37 +5,24 @@ import commun.MessageObserver;
 import models.*;
 import observers.CanalTCPObserver;
 import commun.ConfigObserver;
+import session.ISession;
 import session.Session;
-import tcp.CanalTCP;
-import udp.CanalUDP;
-import observers.CanalUDPObserver;
+import tcp.HandlerTCP;
+import udp.ICanalUDP;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObservable {
+public class Service implements MessageObservable, IService {
 
-    private CanalUDP myCanalUDP;
-    private CanalTCP myCanalTCP;
-    private Config myConfig;
+    private ICanalUDP myCanalUDP;
+    private IConfig myConfig;
 
     public Service() throws IOException {
-        this.myCanalUDP = new CanalUDP();
-        this.myCanalTCP = new CanalTCP();
-
-        // Observers
-        this.myCanalUDP.subscribe(this);
-        this.subscribe(this.myCanalUDP);
-
-        this.myCanalTCP.subscribe(this);
-        //
-
-        this.myConfig = new Config();
     }
 
-    // Service
+    // Functions call in front
     public void serviceSendSetup() throws IOException {
         this.myCanalUDP.sendSetup(this.myConfig.getIdSetup());
     }
@@ -50,22 +37,17 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
         this.myConfig.setConnected(false);
     }
 
-    public void serviceSendSession(Session session) throws IOException {
+    public void serviceSendSession(ISession session) throws IOException {
         this.myConfig.addSession(session);
         this.myCanalUDP.sendSession(session.getId(), session.getUser().getAddr());
     }
-
-    public void serviceSendChat(MessageChat message, Session session) throws IOException {
-        session.send(message);
-    }
     ///////////
 
-    // Observer
+    // Interface IService for IOS
     @Override
     public void processMessageSetup(MessageSetup message) throws IOException {
         if (message.getData().equals(this.myConfig.getIdSetup())) {
             this.myConfig.setAddr(message.getSource());
-            this.notify(this.myConfig.getAddr().getHostAddress());
         }
         else {
             if (this.myConfig.isConnected()) {
@@ -76,9 +58,7 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
 
     @Override
     public void processMessageSetupAck(MessageSetupAck message) throws IOException {
-        if (this.myConfig.isConnected()) {
-            this.myConfig.addReservedPseudos(message.getData());
-        }
+        this.myConfig.addReservedPseudos(message.getData());
     }
 
     @Override
@@ -107,8 +87,7 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
 
     @Override
     public void processMessageChat(MessageChat message) throws IOException {
-        System.out.println("msg recv");
-        for (Session session : this.myConfig.getSessions()) {
+        for (ISession session : this.myConfig.getSessions()) {
             if (session.getId().equals(message.getIdSession())) {
                 session.addMessage(message);
                 this.notifyChangeMessage(session.getId());
@@ -118,37 +97,29 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
 
     //////////
 
-    // Observable
-
-    @Override
-    public void subscribe(CanalUDP canalUDP) {
-        this.observers.add(canalUDP);
-    }
-
-    @Override
-    public void notify(String addr) {
-        for (CanalUDP c : this.observers) {
-            c.update(addr);
-        }
-    }
-
-    //////////
 
     // Getters
 
     public List<RemoteUser> getRemoteUsers() {
         return this.myConfig.getRemoteUsers();
     }
-    public List<Session> getSessions() {
+    public List<ISession> getSessions() {
         return this.myConfig.getSessions();
     }
     public String getLocalAddr() {
+        if (this.myConfig.getAddr() == null) {
+            return null;
+        }
         return this.myConfig.getAddr().getHostAddress();
+    }
+
+    public String getIdSetup() {
+        return this.myConfig.getIdSetup();
     }
 
     //////////
 
-    // Setters
+    // Setters call in front
 
     public boolean setPseudo(String newPseudo) {
 
@@ -166,17 +137,22 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
         this.myConfig.addSession(session);
     }
 
+    //////////
+
+    // Tools
     public boolean checkPseudo(String pseudo) {
         return this.myConfig.checkPseudo(pseudo);
     }
+    //
 
-    public void subscribeConfig(ConfigObserver observer) {
-        this.myConfig.subscribe(observer);
-    }
 
 
     //////////
 
+    // Observable for front
+    public void subscribeConfig(ConfigObserver observer) {
+        this.myConfig.subscribe(observer);
+    }
     @Override
     public void subscribe(MessageObserver observer) {
         this.messageObservers.add(observer);
@@ -188,4 +164,23 @@ public class Service implements CanalUDPObserver, CanalTCPObserver, MessageObser
             observer.updateMessage(id);
         }
     }
+    //
+
+    // Spring
+    public ICanalUDP getMyCanalUDP() {
+        return myCanalUDP;
+    }
+
+    public void setMyCanalUDP(ICanalUDP myCanalUDP) {
+        this.myCanalUDP = myCanalUDP;
+    }
+
+    public IConfig getMyConfig() {
+        return myConfig;
+    }
+
+    public void setMyConfig(IConfig myConfig) {
+        this.myConfig = myConfig;
+    }
+    //
 }

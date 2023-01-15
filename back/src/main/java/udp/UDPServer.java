@@ -10,19 +10,20 @@ import java.net.*;
 
 class UDPServer extends Thread {
 
+    private HandlerUDP handler;
     private DatagramSocket dgramSocket;
     private byte[] buffer;
     private int sizeBuf = 500;
-    private CanalUDP myCanalUDP;
+    private int portUDP = 14000;
 
-    UDPServer(CanalUDP canalUDP) {
+    UDPServer(HandlerUDP handlerUDP) {
         try {
-            this.dgramSocket = new DatagramSocket(canalUDP.getPortUDP());
+            this.dgramSocket = new DatagramSocket(this.portUDP);
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
         this.buffer = new byte[this.sizeBuf];
-        this.myCanalUDP = canalUDP;
+        this.handler = handlerUDP;
     }
 
     private Message UDPRecv() throws IOException, ClassNotFoundException {
@@ -46,7 +47,7 @@ class UDPServer extends Thread {
     public void run() {
         while (true) {
             try {
-                this.myCanalUDP.messageHandler(this.UDPRecv());
+                this.handler.messageHandler(this.UDPRecv());
             } catch (IOException | ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

@@ -10,10 +10,10 @@ import java.net.Socket;
 public class TCPThread extends Thread {
 
     private Socket link;
-    private CanalTCP myCanalTCP;
-    public TCPThread(Socket link, CanalTCP canalTCP) {
+    private HandlerTCP myHandlerTCP;
+    public TCPThread(Socket link, HandlerTCP handlerTCP) {
         this.link = link;
-        this.myCanalTCP = canalTCP;
+        this.myHandlerTCP = handlerTCP;
     }
 
     private Message TCPRecv() throws IOException, ClassNotFoundException {
@@ -28,7 +28,7 @@ public class TCPThread extends Thread {
     public void run() {
         while (true) {
             try {
-                this.myCanalTCP.messageHandler(this.TCPRecv());
+                this.myHandlerTCP.messageHandler(this.TCPRecv());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (ClassNotFoundException e) {

@@ -1,13 +1,20 @@
 package udp;
 
+import metiers.IService;
 import metiers.Service;
 import models.*;
 
 import java.io.IOException;
 
-public class Handler {
+public class HandlerUDP {
 
-    private Service service;
+    private IService service;
+    private UDPServer server;
+
+    public HandlerUDP() {
+        this.server = new UDPServer(this);
+        this.server.start();
+    }
 
     void messageHandler(Message o) throws IOException {
 
@@ -39,5 +46,13 @@ public class Handler {
                 this.service.processMessageSession((MessageSession) m);
             }
         }
+    }
+
+    public IService getService() {
+        return service;
+    }
+
+    public void setService(IService service) {
+        this.service = service;
     }
 }

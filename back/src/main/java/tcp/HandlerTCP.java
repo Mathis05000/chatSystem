@@ -1,5 +1,6 @@
 package tcp;
 
+import metiers.IService;
 import metiers.Service;
 import models.Message;
 import models.MessageChat;
@@ -7,12 +8,13 @@ import observers.CanalTCPObservable;
 
 import java.io.IOException;
 
-public class CanalTCP implements CanalTCPObservable {
+public class HandlerTCP {
 
     private int portTCP = 15000;
     private TCPServer TCPServer;
+    private IService service;
 
-    public CanalTCP() throws IOException {
+    public HandlerTCP() throws IOException {
         this.TCPServer = new TCPServer(this);
         this.TCPServer.start();
     }
@@ -23,19 +25,17 @@ public class CanalTCP implements CanalTCPObservable {
 
     public void messageHandler(Message m) throws IOException {
         if (m instanceof MessageChat) {
-            this.notifyMessageChat((MessageChat) m);
+            service.processMessageChat((MessageChat) m);
         }
     }
 
-    @Override
-    public void notifyMessageChat(MessageChat m) throws IOException {
-        for(Service observer : this.observers) {
-            observer.processMessageChat(m);
-        }
+    // Spring
+    public IService getService() {
+        return service;
     }
 
-    @Override
-    public void subscribe(Service service) {
-        this.observers.add(service);
+    public void setService(IService service) {
+        this.service = service;
     }
+    //
 }

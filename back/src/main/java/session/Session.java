@@ -1,6 +1,6 @@
 package session;
 
-import db.DAO;
+import db.Dao;
 import models.MessageChat;
 import models.RemoteUser;
 import tcp.TCPSender;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Session {
+public class Session implements ISession{
 
     private String id;
     private List<MessageChat> messages = new ArrayList<MessageChat>();
@@ -45,11 +45,8 @@ public class Session {
         this.messages.add(message);
 
         // add Message to Database
-        try {
-            DAO.getInstance().insertMessage(message);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Dao.getInstance().insertMessage(message);
+
     }
 
     public RemoteUser getUser() {

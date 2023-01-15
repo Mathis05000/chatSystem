@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import metiers.Service;
 import models.MessageChat;
 import models.RemoteUser;
+import session.ISession;
 import session.Session;
 import commun.ConfigObserver;
 
@@ -40,9 +41,9 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
     @FXML
     private Button input_button;
     private Service service;
-    private Session selectedSession;
+    private ISession selectedSession;
     private ObservableList<RemoteUser> observableListRemoteUsers;
-    private ObservableList<Session> observableListSession;
+    private ObservableList<ISession> observableListSession;
 
 
 
@@ -68,7 +69,7 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
 
         this.listUser.setOnMouseClicked(event -> {
             RemoteUser user = (RemoteUser) listUser.getSelectionModel().getSelectedItem();
-            Session session = this.findSession(user);
+            ISession session = this.findSession(user);
             tabpane.getSelectionModel().selectNext();
 
             if (session == null) {
@@ -142,8 +143,8 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
 
     // Tools
 
-    public Session findSession(RemoteUser user) {
-        for (Session session : this.service.getSessions()) {
+    public ISession findSession(RemoteUser user) {
+        for (ISession session : this.service.getSessions()) {
             System.out.println("session : " + session.getUser().getPseudo());
             System.out.println("user : " + user.getPseudo());
             if (session.getUser().getPseudo().equals(user.getPseudo())) {

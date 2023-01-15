@@ -1,5 +1,6 @@
 package gui.front;
 
+import factory.Factory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +22,7 @@ public class LoginController {
     private Service service;
 
     public LoginController() throws IOException {
-        this.service = new Service();
+        this.service = Factory.getService();
         this.service.serviceSendSetup();
     }
 
@@ -32,9 +33,8 @@ public class LoginController {
         ChatController controller = loader.getController();
 
         while (this.service.setPseudo(pseudo.getText()) == false) {
-            // TODO
         }
-        
+
         controller.setService(this.service);
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

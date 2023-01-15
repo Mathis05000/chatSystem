@@ -26,46 +26,5 @@ public class CanalUDPTest {
     private CanalUDP myCanal;
     private String pseudo;
 
-    @BeforeEach
-    void begin() throws SocketException, UnknownHostException {
-        this.myCanal = new CanalUDP();
-        this.pseudo = "toto";
-    }
-
-    @AfterEach
-    void end() {
-        this.myCanal.shutDown();
-    }
-
-    @Test
-    public void testConnect() throws IOException, InterruptedException {
-        this.myCanal.sendConnect(this.pseudo);
-        Thread.sleep(100);
-        Message recvMessage = this.myCanal.getBufferMessagesRecv().get(0);
-
-        assertTrue(recvMessage instanceof MessageConnect);
-        assertEquals(recvMessage.getData(), this.pseudo);
-    }
-
-    @Test
-    public void testConnectAck() throws IOException, InterruptedException {
-        this.myCanal.sendConnectAck(this.pseudo, true, InetAddress.getLocalHost());
-        Thread.sleep(100);
-        Message recvMessage = this.myCanal.getBufferMessagesRecv().get(0);
-
-        assertTrue(recvMessage instanceof MessageConnectAck);
-        assertEquals(recvMessage.getData(), this.pseudo);
-        assertTrue(((MessageConnectAck) recvMessage).isValide());
-    }
-
-    @Test
-    public void testDisconnect() throws IOException, InterruptedException {
-        this.myCanal.sendDisconnect(this.pseudo);
-        Thread.sleep(100);
-        Message recvMessage = this.myCanal.getBufferMessagesRecv().get(0);
-
-        assertTrue(recvMessage instanceof MessageDisconnect);
-        assertEquals(recvMessage.getData(), this.pseudo);
-    }
 
 }

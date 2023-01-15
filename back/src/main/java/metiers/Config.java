@@ -1,9 +1,10 @@
 package metiers;
 
-import db.DAO;
+import db.Dao;
 import models.*;
 import commun.ConfigObservable;
 import commun.ConfigObserver;
+import session.ISession;
 import session.Session;
 
 import java.io.IOException;
@@ -13,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-class Config implements ConfigObservable {
+public class Config implements ConfigObservable, IConfig {
 
     private LocalUser myUser = new LocalUser();
     private String idSetup = UUID.randomUUID().toString();
-    private List<Session> sessions =  new ArrayList<Session>();
+    private List<ISession> sessions =  new ArrayList<ISession>();
     private List<RemoteUser> remoteUsers = new ArrayList<RemoteUser>();
     private List<String> reservedPseudos = new ArrayList<String>();
     private boolean connected;
@@ -25,21 +26,6 @@ class Config implements ConfigObservable {
     public Config() throws IOException {
 
         connected = false;
-        // Mocks
-        /*RemoteUser user1 = new RemoteUser("thomas", null);
-        RemoteUser user2 = new RemoteUser("basile", null);
-        remoteUsers.add(user1);
-        remoteUsers.add(user2);
-
-        Session session1 = new Session(user1);
-        Session session2 = new Session(user2);
-        session1.addMessage(new MessageChat("salut session 1"));
-        session1.addMessage(new MessageChat("ça va 1 ?"));
-        session2.addMessage(new MessageChat("salut session 2"));
-        session2.addMessage(new MessageChat("ça va 2 ?"));
-        sessions.add(session1);
-        sessions.add(session2);*/
-        //
     }
 
     // Getters myUser
@@ -69,13 +55,11 @@ class Config implements ConfigObservable {
 
         // Load bind session if exist
         try {
-            String idSession = DAO.getInstance().getSession(user);
+            String idSession = Dao.getInstance().getSession(user);
             if (idSession != null) {
-                List<MessageChat> messages = DAO.getInstance().getMessages(idSession);
+                List<MessageChat> messages = Dao.getInstance().getMessages(idSession);
                 this.addStoredSession(new Session(user, idSession, messages));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,17 +67,15 @@ class Config implements ConfigObservable {
     }
 
     public void delRemoteUser(InetAddress addr) {
+        RemoteUser tmpUser = null;
         for (RemoteUser user : this.remoteUsers) {
-            if (user.getAddr().getHostAddress().equals(addr)) {
-                // test
-                System.out.println("Disconnect : " + user);
-                //
-                this.remoteUsers.remove(user);
-
-                this.delSession(user);
+            if (user.getAddr().equals(addr)) {
+                tmpUser = user;
             }
         }
-        this.notifyChangeRemoteUsers();
+        if (tmpUser != null) {
+            this.remoteUsers.remove(tmpUser);
+        }
     }
 
     public RemoteUser getUserByAddr(InetAddress addr) {
@@ -129,21 +111,16 @@ class Config implements ConfigObservable {
         this.connected = connected;
     }
 
-    public List<Session> getSessions() {
+    public List<ISession> getSessions() {
         return sessions;
     }
 
-    public void addSession(Session session) {
+    public void addSession(ISession session) {
         this.sessions.add(session);
         this.notifyChangeSessions();
 
         // add session to Database
-        try {
-            DAO.getInstance().insertSession(session);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        Dao.getInstance().insertSession(session);
     }
 
     public void addStoredSession(Session session) {
@@ -162,7 +139,7 @@ class Config implements ConfigObservable {
     }
 
     public boolean checkPseudo(String pseudo) {
-        return this.reservedPseudos.contains(pseudo);
+        return !this.reservedPseudos.contains(pseudo);
     }
 
     @Override

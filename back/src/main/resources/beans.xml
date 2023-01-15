@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="myCanalUDP" class="udp.CanalUDP">
+    </bean>
+
+    <bean id="myConfig" class="metiers.Config">
+    </bean>
+
+    <bean id="service" class="metiers.Service">
+        <property name="myCanalUDP" ref="myCanalUDP"/>
+        <property name="myConfig" ref="myConfig"/>
+    </bean>
+
+    <bean id="handlerUDP" class="udp.HandlerUDP">
+        <property name="service" ref="service"/>
+    </bean>
+
+    <bean id="handlerTCP" class="tcp.HandlerTCP">
+        <property name="service" ref="service"/>
+    </bean>
+
+
+
+
+
+</beans>
