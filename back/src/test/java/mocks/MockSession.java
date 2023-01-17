@@ -1,5 +1,6 @@
 package mocks;
 
+import db.IDao;
 import models.MessageChat;
 import models.RemoteUser;
 import session.ISession;
@@ -41,5 +42,10 @@ public class MockSession implements ISession {
     @Override
     public List<MessageChat> getMessages() {
         return messages;
+    }
+
+    @Override
+    public void setDao(IDao dao) {
+
     }
 }

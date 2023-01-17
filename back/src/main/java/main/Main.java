@@ -1,18 +1,24 @@
 package main;
 
 
+import db.Dao;
 import factory.Factory;
 import metiers.Service;
+import models.RemoteUser;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Main {
 
     public static void main(String[] args) throws IOException, SQLException {
 
-        Service service = Factory.getService();
-        System.out.println(service);
+        Dao dao = Dao.getInstance();
+
+        String rs = dao.getSession(new RemoteUser("ishaac", null));
+        System.out.println(rs);
+
         /*System.out.println("last version");
         Scanner sc = new Scanner(System.in);
         Service service = new Service();

@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
-public class ChatController implements Initializable, ConfigObserver, MessageObserver {
+public class ChatController implements Initializable, ConfigObserver {
 
     @FXML
     private TabPane tabpane;
@@ -54,7 +54,6 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
     public void setService(Service service) throws IOException {
         this.service = service;
         this.service.subscribeConfig(this);
-        this.service.subscribe(this);
         this.service.serviceSendConnect();
     }
 
@@ -126,17 +125,30 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
 
     @Override
     public void updateListRemoteUsers() {
-        System.out.println(service.getRemoteUsers().size());
-        this.observableListRemoteUsers = FXCollections.observableList(service.getRemoteUsers());
-        this.listUser.setItems(this.observableListRemoteUsers);
-        System.out.println("listener");
+
+        Platform.runLater(() -> {
+            this.observableListRemoteUsers = FXCollections.observableList(service.getRemoteUsers());
+            this.listUser.setItems(this.observableListRemoteUsers);
+        });
     }
 
     @Override
     public void updateListSession() {
-        this.observableListSession = FXCollections.observableList(service.getSessions());
-        this.listSession.setItems(this.observableListSession);
-        System.out.println("listener");
+        Platform.runLater(() -> {
+            this.observableListSession = FXCollections.observableList(service.getSessions());
+            this.listSession.setItems(this.observableListSession);
+        });
+    }
+
+    @Override
+    public void updateMessage(String id) {
+        Platform.runLater(() -> {
+            if (this.selectedSession != null) {
+                if (this.selectedSession.getId().equals(id)) {
+                    this.updateConversation();
+                }
+            }
+        });
     }
 
     // Tools
@@ -153,31 +165,4 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
         }
         return null;
     }
-
-    @Override
-    public void updateMessage(String id) {
-        if (this.selectedSession != null) {
-            if (this.selectedSession.getId().equals(id)) {
-                this.updateConversation();
-            }
-        }
-
-    }
-
-    // test
-
-    public void addSession() throws IOException, SQLException {
-        System.out.println(this.observableListSession.size());
-        RemoteUser user = new RemoteUser("rocky", null);
-        this.service.addRemoteUser(user);
-        this.service.addSession(new Session(user));
-        System.out.println("addSession");
-        System.out.println(this.observableListSession.size());
-    }
-
-    public void printUsers() {
-        System.out.println(this.service.getRemoteUsers().size());
-    }
-
-
 }

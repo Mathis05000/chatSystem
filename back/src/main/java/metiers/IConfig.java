@@ -30,6 +30,7 @@ public interface IConfig {
     void addSession(ISession session);
     void addStoredSession(Session session);
     void delSession(RemoteUser user);
+    void addMessage(MessageChat message);
     boolean checkPseudo(String pseudo);
     void subscribe(ConfigObserver observer);
     void notifyChangeRemoteUsers();

@@ -32,12 +32,15 @@ public class LoginController {
 
         ChatController controller = loader.getController();
 
-        while (this.service.setPseudo(pseudo.getText()) == false) {
+        if (this.service.setPseudo(pseudo.getText()) == false) {
+
         }
 
         controller.setService(this.service);
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        stage.setTitle(pseudo.getText());
 
         stage.setOnCloseRequest(e -> {
             try {

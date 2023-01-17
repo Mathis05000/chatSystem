@@ -29,6 +29,7 @@ public class Dao implements IDao {
             if (!rs.next()) {
                 statement.executeUpdate("create table message (id_session string, data string, date Date)");
             }
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -42,7 +43,7 @@ public class Dao implements IDao {
     public void insertMessage(MessageChat message){
         try {
             Statement statement = this.connection.createStatement();
-            statement.executeUpdate("insert into Message values('" + message.getIdSession() + "', '" + message.getData() + "', '"+ new java.sql.Date(message.getDate().getTime()) +"')");
+            statement.executeUpdate("insert into Message values('" + message.getIdSession() + "', '" + message.getData() + "', '"+ message.getDate().getTime() +"')");
             statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -52,7 +53,7 @@ public class Dao implements IDao {
     public void insertSession(ISession session) {
         try {
             Statement statement = this.connection.createStatement();
-            statement.executeUpdate("insert into Session values('" + session.getId() + "', '" + session.getUser().getPseudo() + "')");
+            statement.executeUpdate("insert into Session values('" + session.getId() + "', '" + session.getUser().getPseudo() + "');");
             statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -61,15 +62,19 @@ public class Dao implements IDao {
 
     public String getSession(RemoteUser user) {
         try {
+
             Statement statement = this.connection.createStatement();
-            ResultSet res = statement.executeQuery("select id from Session where pseudo = '" + user.getPseudo() + "'");
-            statement.close();
+            ResultSet res = statement.executeQuery("select id from Session where pseudo = '" + user.getPseudo() + "';");
+
             if (res.next()) {
+                System.out.println("SQL");
                 return res.getString("id");
 
             } else {
                 return null;
             }
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -79,17 +84,16 @@ public class Dao implements IDao {
     public List<MessageChat> getMessages(String idSession) {
         try {
             Statement statement = this.connection.createStatement();
-            ResultSet res = statement.executeQuery("select * from Message where id_session = '" + idSession + "'");
-            statement.close();
+            ResultSet res = statement.executeQuery("select * from message where id_session = '" + idSession + "'");
 
             List<MessageChat> list = new ArrayList<MessageChat>();
             while (res.next()) {
-                list.add(new MessageChat(res.getString("data"), res.getString("id_session"), new Date(res.getDate("date").getTime())));
+                Date date = new Date(res.getDate("date").getTime());
+                list.add(new MessageChat(res.getString("data"), res.getString("id_session"), date));
             }
             return list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

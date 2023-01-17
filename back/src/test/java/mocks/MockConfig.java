@@ -2,6 +2,7 @@ package mocks;
 
 import commun.ConfigObserver;
 import metiers.IConfig;
+import models.MessageChat;
 import models.RemoteUser;
 import session.ISession;
 import session.Session;
@@ -116,6 +117,11 @@ public class MockConfig implements IConfig {
 
     @Override
     public void delSession(RemoteUser user) {
+
+    }
+
+    @Override
+    public void addMessage(MessageChat message) {
 
     }
 
