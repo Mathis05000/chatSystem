@@ -4,27 +4,30 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="myCanalUDP" class="udp.CanalUDP">
+    <bean id="sender" class="udp.UDPSender" factory-method="getInstance" scope="singleton">
     </bean>
 
-    <bean id="myConfig" class="metiers.Config">
+    <bean id="dao" class="db.Dao" factory-method="getInstance" scope="singleton">
     </bean>
 
-    <bean id="service" class="metiers.Service">
+    <bean id="myConfig" class="metiers.Config" scope="singleton">
+        <property name="dao" ref="dao"/>
+    </bean>
+
+    <bean id="myCanalUDP" class="udp.CanalUDP" scope="singleton">
+    </bean>
+
+    <bean id="service" class="metiers.Service" scope="singleton">
         <property name="myCanalUDP" ref="myCanalUDP"/>
         <property name="myConfig" ref="myConfig"/>
     </bean>
 
-    <bean id="handlerUDP" class="udp.HandlerUDP">
+    <bean id="handlerUDP" class="udp.HandlerUDP" scope="singleton">
         <property name="service" ref="service"/>
     </bean>
 
-    <bean id="handlerTCP" class="tcp.HandlerTCP">
+    <bean id="handlerTCP" class="tcp.HandlerTCP" scope="singleton">
         <property name="service" ref="service"/>
     </bean>
-
-
-
-
 
 </beans>

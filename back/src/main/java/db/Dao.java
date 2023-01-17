@@ -20,12 +20,12 @@ public class Dao implements IDao {
             connection = DriverManager.getConnection("jdbc:sqlite:chat.db");
             Statement statement = connection.createStatement();
 
-            ResultSet rs = statement.executeQuery("SELECT * FROM sqlite_schema WHERE name = 'Session';");
+            ResultSet rs = statement.executeQuery("SELECT * FROM sqlite_schema where name = 'session';");
             if (!rs.next()) {
                 statement.executeUpdate("create table session (id string, pseudo string)");
             }
 
-            rs = statement.executeQuery("SELECT * FROM sqlite_schema WHERE name = 'Message';");
+            rs = statement.executeQuery("SELECT * FROM sqlite_schema WHERE name = 'message';");
             if (!rs.next()) {
                 statement.executeUpdate("create table message (id_session string, data string, date Date)");
             }

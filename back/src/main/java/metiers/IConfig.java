@@ -14,8 +14,8 @@ import java.util.List;
 public interface IConfig {
 
     String getPseudo();
-    InetAddress getAddr();
     void setPseudo(String pseudo);
+    InetAddress getAddr();
     void setAddr(InetAddress addr);
     void addRemoteUser(RemoteUser user);
     void delRemoteUser(InetAddress addr);

@@ -6,12 +6,13 @@ import java.net.Socket;
 
 public class TCPServer extends Thread {
 
+    private int portTCP = 15000;
     private ServerSocket servSocket;
     private HandlerTCP myHandlerTCP;
 
     public TCPServer(HandlerTCP handlerTCP) throws IOException {
         this.myHandlerTCP = handlerTCP;
-        this.servSocket = new ServerSocket(this.myHandlerTCP.getPortTCP());
+        this.servSocket = new ServerSocket(this.portTCP);
     }
 
     private void TCPRecv() throws IOException, ClassNotFoundException {

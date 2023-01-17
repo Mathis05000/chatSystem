@@ -1,6 +1,6 @@
 package metiers;
 
-import db.Dao;
+import db.IDao;
 import models.*;
 import commun.ConfigObservable;
 import commun.ConfigObserver;
@@ -9,7 +9,6 @@ import session.Session;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +21,7 @@ public class Config implements ConfigObservable, IConfig {
     private List<RemoteUser> remoteUsers = new ArrayList<RemoteUser>();
     private List<String> reservedPseudos = new ArrayList<String>();
     private boolean connected;
+    private IDao dao;
 
     public Config() throws IOException {
 
@@ -55,9 +55,9 @@ public class Config implements ConfigObservable, IConfig {
 
         // Load bind session if exist
         try {
-            String idSession = Dao.getInstance().getSession(user);
+            String idSession = dao.getSession(user);
             if (idSession != null) {
-                List<MessageChat> messages = Dao.getInstance().getMessages(idSession);
+                List<MessageChat> messages = dao.getMessages(idSession);
                 this.addStoredSession(new Session(user, idSession, messages));
             }
         } catch (IOException e) {
@@ -120,7 +120,7 @@ public class Config implements ConfigObservable, IConfig {
         this.notifyChangeSessions();
 
         // add session to Database
-        Dao.getInstance().insertSession(session);
+        dao.insertSession(session);
     }
 
     public void addStoredSession(Session session) {
@@ -163,4 +163,14 @@ public class Config implements ConfigObservable, IConfig {
             configObserver.updateListSession();
         });
     }
+
+    // Spring
+    public IDao getDao() {
+        return dao;
+    }
+
+    public void setDao(IDao dao) {
+        this.dao = dao;
+    }
+    //
 }

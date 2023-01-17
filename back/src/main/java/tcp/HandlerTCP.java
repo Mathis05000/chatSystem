@@ -10,17 +10,12 @@ import java.io.IOException;
 
 public class HandlerTCP {
 
-    private int portTCP = 15000;
     private TCPServer TCPServer;
     private IService service;
 
     public HandlerTCP() throws IOException {
         this.TCPServer = new TCPServer(this);
         this.TCPServer.start();
-    }
-
-    public int getPortTCP() {
-        return portTCP;
     }
 
     public void messageHandler(Message m) throws IOException {
