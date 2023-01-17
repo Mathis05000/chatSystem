@@ -125,27 +125,30 @@ public class ChatController implements Initializable, ConfigObserver {
 
     @Override
     public void updateListRemoteUsers() {
-        System.out.println(service.getRemoteUsers().size());
-        this.observableListRemoteUsers = FXCollections.observableList(service.getRemoteUsers());
-        this.listUser.setItems(this.observableListRemoteUsers);
-        System.out.println("listener");
+
+        Platform.runLater(() -> {
+            this.observableListRemoteUsers = FXCollections.observableList(service.getRemoteUsers());
+            this.listUser.setItems(this.observableListRemoteUsers);
+        });
     }
 
     @Override
     public void updateListSession() {
-        this.observableListSession = FXCollections.observableList(service.getSessions());
-        this.listSession.setItems(this.observableListSession);
-        System.out.println("listener");
+        Platform.runLater(() -> {
+            this.observableListSession = FXCollections.observableList(service.getSessions());
+            this.listSession.setItems(this.observableListSession);
+        });
     }
 
     @Override
     public void updateMessage(String id) {
-        if (this.selectedSession != null) {
-            if (this.selectedSession.getId().equals(id)) {
-                this.updateConversation();
+        Platform.runLater(() -> {
+            if (this.selectedSession != null) {
+                if (this.selectedSession.getId().equals(id)) {
+                    this.updateConversation();
+                }
             }
-        }
-
+        });
     }
 
     // Tools

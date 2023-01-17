@@ -77,7 +77,10 @@ public class Config implements ConfigObservable, IConfig {
         }
         if (tmpUser != null) {
             this.remoteUsers.remove(tmpUser);
+            this.delSession(tmpUser);
         }
+
+
         this.notifyChangeRemoteUsers();
     }
 
@@ -134,13 +137,17 @@ public class Config implements ConfigObservable, IConfig {
     }
 
     public void delSession(RemoteUser user) {
-        this.sessions.forEach(session -> {
+        ISession tmpSession = null;
+        for (ISession session : this.sessions) {
             if (session.getUser().getPseudo().equals(user.getPseudo())) {
-                this.sessions.remove(session);
+                tmpSession = session;
             }
-        });
+        }
+        if (tmpSession != null) {
+            this.sessions.remove(tmpSession);
+            this.notifyChangeSessions();
+        }
 
-        this.notifyChangeSessions();
     }
 
     public void addMessage(MessageChat message) {
