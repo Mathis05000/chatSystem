@@ -165,23 +165,4 @@ public class ChatController implements Initializable, ConfigObserver {
         }
         return null;
     }
-
-
-
-    // test
-
-    public void addSession() throws IOException, SQLException {
-        System.out.println(this.observableListSession.size());
-        RemoteUser user = new RemoteUser("rocky", null);
-        this.service.addRemoteUser(user);
-        this.service.addSession(new Session(user));
-        System.out.println("addSession");
-        System.out.println(this.observableListSession.size());
-    }
-
-    public void printUsers() {
-        System.out.println(this.service.getRemoteUsers().size());
-    }
-
-
 }
