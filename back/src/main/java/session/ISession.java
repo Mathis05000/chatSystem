@@ -1,6 +1,7 @@
 package session;
 
 import db.Dao;
+import db.IDao;
 import models.MessageChat;
 import models.RemoteUser;
 import tcp.TCPSender;
@@ -21,4 +22,6 @@ public interface ISession {
     void send(MessageChat message) throws IOException;
 
     List<MessageChat> getMessages();
+
+    void setDao(IDao dao);
 }

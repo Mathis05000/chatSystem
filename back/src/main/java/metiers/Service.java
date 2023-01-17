@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Service implements MessageObservable, IService {
+public class Service implements IService {
 
     private ICanalUDP myCanalUDP;
     private IConfig myConfig;
@@ -33,6 +33,7 @@ public class Service implements MessageObservable, IService {
     }
 
     public void serviceSendDisconnect() throws IOException {
+        System.out.println("sendDisconnect");
         this.myCanalUDP.sendDisconnect(this.myConfig.getPseudo());
         this.myConfig.setConnected(false);
     }
@@ -87,12 +88,7 @@ public class Service implements MessageObservable, IService {
 
     @Override
     public void processMessageChat(MessageChat message) throws IOException {
-        for (ISession session : this.myConfig.getSessions()) {
-            if (session.getId().equals(message.getIdSession())) {
-                session.addMessage(message);
-                this.notifyChangeMessage(session.getId());
-            }
-        }
+        this.myConfig.addMessage(message);
     }
 
     //////////
@@ -152,17 +148,6 @@ public class Service implements MessageObservable, IService {
     // Observable for front
     public void subscribeConfig(ConfigObserver observer) {
         this.myConfig.subscribe(observer);
-    }
-    @Override
-    public void subscribe(MessageObserver observer) {
-        this.messageObservers.add(observer);
-    }
-
-    @Override
-    public void notifyChangeMessage(String id) {
-        for (MessageObserver observer : this.messageObservers) {
-            observer.updateMessage(id);
-        }
     }
     //
 

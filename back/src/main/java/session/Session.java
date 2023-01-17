@@ -1,6 +1,7 @@
 package session;
 
 import db.Dao;
+import db.IDao;
 import models.MessageChat;
 import models.RemoteUser;
 import tcp.TCPSender;
@@ -17,6 +18,7 @@ public class Session implements ISession{
     private List<MessageChat> messages = new ArrayList<MessageChat>();
     private RemoteUser user;
     private TCPSender myTCPSender;
+    private IDao dao;
 
     public Session(RemoteUser user) throws IOException {
         this.id = UUID.randomUUID().toString();
@@ -45,7 +47,8 @@ public class Session implements ISession{
         this.messages.add(message);
 
         // add Message to Database
-        Dao.getInstance().insertMessage(message);
+        System.out.println("insert message");
+        dao.insertMessage(message);
 
     }
 
@@ -55,7 +58,7 @@ public class Session implements ISession{
 
     public void send(MessageChat message) throws IOException {
         message.setIdSession(this.id);
-        this.messages.add(message);
+        this.addMessage(message);
         this.myTCPSender.send(message);
     }
 
@@ -66,5 +69,13 @@ public class Session implements ISession{
     @Override
     public String toString() {
         return user.getPseudo();
+    }
+
+    public IDao getDao() {
+        return dao;
+    }
+
+    public void setDao(IDao dao) {
+        this.dao = dao;
     }
 }

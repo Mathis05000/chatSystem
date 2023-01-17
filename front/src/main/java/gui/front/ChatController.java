@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
-public class ChatController implements Initializable, ConfigObserver, MessageObserver {
+public class ChatController implements Initializable, ConfigObserver {
 
     @FXML
     private TabPane tabpane;
@@ -54,7 +54,6 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
     public void setService(Service service) throws IOException {
         this.service = service;
         this.service.subscribeConfig(this);
-        this.service.subscribe(this);
         this.service.serviceSendConnect();
     }
 
@@ -139,6 +138,16 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
         System.out.println("listener");
     }
 
+    @Override
+    public void updateMessage(String id) {
+        if (this.selectedSession != null) {
+            if (this.selectedSession.getId().equals(id)) {
+                this.updateConversation();
+            }
+        }
+
+    }
+
     // Tools
 
     // Tools
@@ -154,15 +163,7 @@ public class ChatController implements Initializable, ConfigObserver, MessageObs
         return null;
     }
 
-    @Override
-    public void updateMessage(String id) {
-        if (this.selectedSession != null) {
-            if (this.selectedSession.getId().equals(id)) {
-                this.updateConversation();
-            }
-        }
 
-    }
 
     // test
 

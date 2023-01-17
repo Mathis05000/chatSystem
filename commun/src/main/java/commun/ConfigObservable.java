@@ -9,4 +9,5 @@ public interface ConfigObservable {
     void subscribe(ConfigObserver observer);
     void notifyChangeRemoteUsers();
     void notifyChangeSessions();
+    void notifyChangeMessage(String idSession);
 }

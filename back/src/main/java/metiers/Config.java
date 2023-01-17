@@ -1,5 +1,6 @@
 package metiers;
 
+import commun.MessageObserver;
 import db.IDao;
 import models.*;
 import commun.ConfigObservable;
@@ -56,6 +57,7 @@ public class Config implements ConfigObservable, IConfig {
         // Load bind session if exist
         try {
             String idSession = dao.getSession(user);
+            System.out.println("idsession : " + idSession);
             if (idSession != null) {
                 List<MessageChat> messages = dao.getMessages(idSession);
                 this.addStoredSession(new Session(user, idSession, messages));
@@ -76,6 +78,7 @@ public class Config implements ConfigObservable, IConfig {
         if (tmpUser != null) {
             this.remoteUsers.remove(tmpUser);
         }
+        this.notifyChangeRemoteUsers();
     }
 
     public RemoteUser getUserByAddr(InetAddress addr) {
@@ -116,6 +119,7 @@ public class Config implements ConfigObservable, IConfig {
     }
 
     public void addSession(ISession session) {
+        session.setDao(this.dao);
         this.sessions.add(session);
         this.notifyChangeSessions();
 
@@ -124,6 +128,7 @@ public class Config implements ConfigObservable, IConfig {
     }
 
     public void addStoredSession(Session session) {
+        session.setDao(this.dao);
         this.sessions.add(session);
         this.notifyChangeSessions();
     }
@@ -138,10 +143,20 @@ public class Config implements ConfigObservable, IConfig {
         this.notifyChangeSessions();
     }
 
+    public void addMessage(MessageChat message) {
+        for (ISession session : this.sessions) {
+            if (session.getId().equals(message.getIdSession())) {
+                session.addMessage(message);
+            }
+        }
+        this.notifyChangeMessage(message.getIdSession());
+    }
+
     public boolean checkPseudo(String pseudo) {
         return !this.reservedPseudos.contains(pseudo);
     }
 
+    // Observable for front
     @Override
     public void subscribe(ConfigObserver observer) {
         System.out.println("subscribe : " + observer);
@@ -163,6 +178,14 @@ public class Config implements ConfigObservable, IConfig {
             configObserver.updateListSession();
         });
     }
+
+    @Override
+    public void notifyChangeMessage(String idSession) {
+        for (ConfigObserver observer : this.observers) {
+            observer.updateMessage(idSession);
+        }
+    }
+    //
 
     // Spring
     public IDao getDao() {
