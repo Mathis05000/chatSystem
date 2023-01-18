@@ -96,4 +96,14 @@ public class Dao implements IDao {
             throw new RuntimeException(e);
         }
     }
+
+    public void changePseudo(String oldPseudo, String newPseudo) {
+        Statement statement = null;
+        try {
+            statement = this.connection.createStatement();
+            statement.executeQuery("update session set pseudo = '" + newPseudo + "' where pseudo = '" + oldPseudo + "'");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }

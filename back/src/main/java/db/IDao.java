@@ -17,4 +17,5 @@ public interface IDao {
     void insertSession(ISession session);
     String getSession(RemoteUser user);
     List<MessageChat> getMessages(String idSession);
+    void changePseudo(String oldPseudo, String newPseudo);
 }

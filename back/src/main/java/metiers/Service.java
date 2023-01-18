@@ -42,6 +42,11 @@ public class Service implements IService {
         this.myConfig.addSession(session);
         this.myCanalUDP.sendSession(session.getId(), session.getUser().getAddr());
     }
+
+    public void serviceSendPseudo(String newPseudo) throws IOException {
+        this.myConfig.setPseudo(newPseudo);
+        this.myCanalUDP.sendSession(session.getId(), session.getUser().getAddr());
+    }
     ///////////
 
     // Interface IService for IOS
@@ -91,6 +96,12 @@ public class Service implements IService {
     public void processMessageChat(MessageChat message) throws IOException {
         this.myConfig.addMessage(message);
     }
+
+    @Override
+    public void processMessagePseudo(MessagePseudo m) {
+        this.myConfig.changePseudoRemoteUser(m.getData(), m.getNewPseudo());
+    }
+
 
     //////////
 

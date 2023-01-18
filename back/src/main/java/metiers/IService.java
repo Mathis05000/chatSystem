@@ -13,5 +13,7 @@ public interface IService {
     void processMessageDisconnect(MessageDisconnect m);
     void processMessageSession(MessageSession m) throws IOException;
     void processMessageChat(MessageChat m) throws IOException;
+    void processMessagePseudo(MessagePseudo m);
+
 
 }

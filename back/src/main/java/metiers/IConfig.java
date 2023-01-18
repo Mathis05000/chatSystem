@@ -32,6 +32,7 @@ public interface IConfig {
     void delSession(RemoteUser user);
     void addMessage(MessageChat message);
     boolean checkPseudo(String pseudo);
+    void changePseudoRemoteUser(String oldPseudo, String newPseudo);
     void subscribe(ConfigObserver observer);
     void notifyChangeRemoteUsers();
     void notifyChangeSessions();

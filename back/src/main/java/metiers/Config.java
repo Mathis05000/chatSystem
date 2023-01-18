@@ -163,6 +163,15 @@ public class Config implements ConfigObservable, IConfig {
         return !this.reservedPseudos.contains(pseudo);
     }
 
+    public void changePseudoRemoteUser(String oldPseudo, String newPseudo) {
+        for (RemoteUser user : this.remoteUsers) {
+            if (user.getPseudo().equals(oldPseudo)) {
+                user.setPseudo(newPseudo);
+                this.dao.changePseudo(oldPseudo, newPseudo);
+            }
+        }
+    }
+
     // Observable for front
     @Override
     public void subscribe(ConfigObserver observer) {

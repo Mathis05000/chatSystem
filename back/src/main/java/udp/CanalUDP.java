@@ -23,9 +23,9 @@ public class CanalUDP implements ICanalUDP{
         this.UDPClient.send(message, this.broadcast);
     }
 
-    public void sendSetupAck(String pseudo, InetAddress addr) throws IOException {
+    public void sendSetupAck(String pseudo, InetAddress address) throws IOException {
         MessageSetupAck message = new MessageSetupAck(pseudo);
-        this.UDPClient.send(message, addr);
+        this.UDPClient.send(message, address);
     }
 
     public void sendConnect(String pseudo) throws IOException {
@@ -43,8 +43,13 @@ public class CanalUDP implements ICanalUDP{
         this.UDPClient.send(message, this.broadcast);
     }
 
-    public void sendSession(String id, InetAddress addr) throws IOException {
+    public void sendSession(String id, InetAddress address) throws IOException {
         MessageSession message = new MessageSession(id);
-        this.UDPClient.send(message, addr);
+        this.UDPClient.send(message, address);
+    }
+
+    public void sendPseudo(String oldPseudo, String newPseudo, InetAddress address) throws IOException {
+        MessagePseudo message = new MessagePseudo(oldPseudo, newPseudo);
+        this.UDPClient.send(message, this.broadcast);
     }
 }
