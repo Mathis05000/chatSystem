@@ -35,6 +35,7 @@ public class LoginController {
 
         ChatController controller = loader.getController();
 
+        this.service.serviceSendSetup();
         if (this.service.setPseudo(pseudo.getText()) == false) {
             errorLabel.setVisible(true);
             pseudo.clear();

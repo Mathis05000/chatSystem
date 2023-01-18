@@ -64,6 +64,7 @@ public class Service implements IService {
 
     @Override
     public void processMessageConnect(MessageConnect message) throws IOException {
+        this.myConfig.addReservedPseudos(message.getData());
         if (this.myConfig.isConnected()) {
             this.myCanalUDP.sendConnectAck(this.myConfig.getPseudo(), true, message.getSource());
             this.myConfig.addRemoteUser(new RemoteUser(message.getData(), message.getSource()));
@@ -140,8 +141,6 @@ public class Service implements IService {
         return this.myConfig.checkPseudo(pseudo);
     }
     //
-
-
 
     //////////
 
