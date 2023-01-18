@@ -24,5 +24,10 @@
             <Font name="STIX Two Math Regular" size="40.0" />
          </font>
       </Label>
+      <Label fx:id="errorLabel" alignment="CENTER" layoutX="93.0" layoutY="258.0" prefHeight="42.0" prefWidth="165.0" text="Pseudo déjà utilisé" textFill="#c60c0c" visible="false">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import metiers.Service;
@@ -16,6 +17,8 @@ import java.io.IOException;
 public class LoginController {
     @FXML
     private TextField pseudo;
+    @FXML
+    private Label errorLabel;
     private Parent root;
     private Stage stage;
     private Scene scene;
@@ -33,7 +36,9 @@ public class LoginController {
         ChatController controller = loader.getController();
 
         if (this.service.setPseudo(pseudo.getText()) == false) {
-
+            errorLabel.setVisible(true);
+            pseudo.clear();
+            return;
         }
 
         controller.setService(this.service);
