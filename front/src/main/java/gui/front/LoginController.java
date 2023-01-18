@@ -7,8 +7,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import metiers.Service;
 
@@ -30,23 +33,21 @@ public class LoginController {
     }
 
     public void login(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("chat-view.fxml"));
-        root = loader.load();
+        FXMLLoader loaderChat = new FXMLLoader(getClass().getResource("chat-view.fxml"));
 
-        ChatController controller = loader.getController();
-
-        this.service.serviceSendSetup();
         if (this.service.setPseudo(pseudo.getText()) == false) {
             errorLabel.setVisible(true);
             pseudo.clear();
             return;
         }
 
+        root = loaderChat.load();
+
+        ChatController controller = loaderChat.getController();
+
         controller.setService(this.service);
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        stage.setTitle(pseudo.getText());
 
         stage.setOnCloseRequest(e -> {
             try {

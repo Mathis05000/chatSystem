@@ -48,7 +48,8 @@ public class CanalUDP implements ICanalUDP{
         this.UDPClient.send(message, address);
     }
 
-    public void sendPseudo(String oldPseudo, String newPseudo, InetAddress address) throws IOException {
+    @Override
+    public void sendPseudo(String oldPseudo, String newPseudo) throws IOException {
         MessagePseudo message = new MessagePseudo(oldPseudo, newPseudo);
         this.UDPClient.send(message, this.broadcast);
     }

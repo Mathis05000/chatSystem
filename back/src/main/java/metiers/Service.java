@@ -44,8 +44,7 @@ public class Service implements IService {
     }
 
     public void serviceSendPseudo(String newPseudo) throws IOException {
-        this.myConfig.setPseudo(newPseudo);
-        this.myCanalUDP.sendSession(session.getId(), session.getUser().getAddr());
+        this.myCanalUDP.sendPseudo(this.myConfig.getPseudo(), newPseudo);
     }
     ///////////
 
@@ -135,6 +134,20 @@ public class Service implements IService {
             return false;
         }
         this.myConfig.setPseudo(newPseudo);
+        return true;
+    }
+
+    public boolean changePseudo(String newPseudo) {
+        if (this.checkPseudo(newPseudo) == false) {
+            return false;
+        }
+        this.myConfig.setPseudo(newPseudo);
+
+        try {
+            this.serviceSendPseudo(newPseudo);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return true;
     }
     public void addRemoteUser(RemoteUser user) {

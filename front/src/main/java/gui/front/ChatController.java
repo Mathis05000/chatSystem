@@ -4,12 +4,19 @@ import commun.MessageObserver;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import metiers.Service;
 import models.MessageChat;
@@ -38,8 +45,7 @@ public class ChatController implements Initializable, ConfigObserver {
     private VBox conversation;
     @FXML
     private TextField input_text;
-    @FXML
-    private Button input_button;
+
     private Service service;
     private ISession selectedSession;
     private ObservableList<RemoteUser> observableListRemoteUsers;
@@ -95,6 +101,16 @@ public class ChatController implements Initializable, ConfigObserver {
         this.selectedSession.send(new MessageChat(input_text.getText()));
         this.input_text.clear();
         this.updateConversation();
+    }
+    public void onChangePseudo(Event event) throws IOException {
+        FXMLLoader loaderPopup = new FXMLLoader(getClass().getResource("popup-view.fxml"));
+        Parent root = loaderPopup.load();
+        PopupController popup = loaderPopup.getController();
+        popup.setService(this.service);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void updateConversation() {

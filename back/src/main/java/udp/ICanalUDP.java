@@ -12,4 +12,5 @@ public interface ICanalUDP {
     void sendConnectAck(String pseudo, boolean valide, InetAddress address) throws IOException;
     void sendDisconnect(String pseudo) throws IOException;
     void sendSession(String id, InetAddress addr) throws IOException;
+    void sendPseudo(String oldPseudo, String newPseudo) throws IOException;
 }
