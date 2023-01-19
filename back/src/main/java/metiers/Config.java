@@ -168,6 +168,8 @@ public class Config implements ConfigObservable, IConfig {
             if (user.getPseudo().equals(oldPseudo)) {
                 user.setPseudo(newPseudo);
                 this.dao.changePseudo(oldPseudo, newPseudo);
+                this.notifyChangeRemoteUsers();
+                this.notifyChangeSessions();
             }
         }
     }
