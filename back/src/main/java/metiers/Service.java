@@ -45,6 +45,7 @@ public class Service implements IService {
 
     public void serviceSendPseudo(String newPseudo) throws IOException {
         this.myCanalUDP.sendPseudo(this.myConfig.getPseudo(), newPseudo);
+        this.myConfig.setPseudo(newPseudo);
     }
     ///////////
 
@@ -98,7 +99,6 @@ public class Service implements IService {
 
     @Override
     public void processMessagePseudo(MessagePseudo m) {
-        System.out.println("recv change pseudo");
         this.myConfig.changePseudoRemoteUser(m.getData(), m.getNewPseudo());
     }
 
@@ -142,7 +142,6 @@ public class Service implements IService {
         if (this.checkPseudo(newPseudo) == false) {
             return false;
         }
-        this.myConfig.setPseudo(newPseudo);
 
         try {
             this.serviceSendPseudo(newPseudo);

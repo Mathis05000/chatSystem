@@ -164,6 +164,7 @@ public class Config implements ConfigObservable, IConfig {
     }
 
     public void changePseudoRemoteUser(String oldPseudo, String newPseudo) {
+        System.out.println("old : " + oldPseudo + " new : " + newPseudo);
         for (RemoteUser user : this.remoteUsers) {
             if (user.getPseudo().equals(oldPseudo)) {
                 user.setPseudo(newPseudo);
