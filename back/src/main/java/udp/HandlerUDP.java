@@ -45,6 +45,10 @@ public class HandlerUDP {
             if (m instanceof MessageSession) {
                 this.service.processMessageSession((MessageSession) m);
             }
+
+            if (m instanceof MessagePseudo) {
+                this.service.processMessagePseudo((MessagePseudo) m);
+            }
         }
     }
 

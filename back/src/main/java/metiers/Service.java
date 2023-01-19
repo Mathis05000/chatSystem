@@ -98,6 +98,7 @@ public class Service implements IService {
 
     @Override
     public void processMessagePseudo(MessagePseudo m) {
+        System.out.println("recv change pseudo");
         this.myConfig.changePseudoRemoteUser(m.getData(), m.getNewPseudo());
     }
 
