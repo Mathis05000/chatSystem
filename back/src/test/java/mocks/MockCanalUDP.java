@@ -44,5 +44,10 @@ public class MockCanalUDP implements ICanalUDP {
         this.inetBouchon = addr;
     }
 
+    @Override
+    public void sendPseudo(String oldPseudo, String newPseudo) throws IOException {
+
+    }
+
 
 }

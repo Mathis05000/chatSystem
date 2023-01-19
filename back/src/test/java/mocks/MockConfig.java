@@ -131,6 +131,11 @@ public class MockConfig implements IConfig {
     }
 
     @Override
+    public void changePseudoRemoteUser(String oldPseudo, String newPseudo) {
+
+    }
+
+    @Override
     public void subscribe(ConfigObserver observer) {
 
     }

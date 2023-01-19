@@ -27,4 +27,9 @@ public class MockDao implements IDao {
     public List<MessageChat> getMessages(String idSession) {
         return null;
     }
+
+    @Override
+    public void changePseudo(String oldPseudo, String newPseudo) {
+
+    }
 }
