@@ -57,7 +57,6 @@ public class Config implements ConfigObservable, IConfig {
         // Load bind session if exist
         try {
             String idSession = dao.getSession(user);
-            System.out.println("idsession : " + idSession);
             if (idSession != null) {
                 List<MessageChat> messages = dao.getMessages(idSession);
                 this.addStoredSession(new Session(user, idSession, messages));
@@ -164,7 +163,6 @@ public class Config implements ConfigObservable, IConfig {
     }
 
     public void changePseudoRemoteUser(String oldPseudo, String newPseudo) {
-        System.out.println("old : " + oldPseudo + " new : " + newPseudo);
         for (RemoteUser user : this.remoteUsers) {
             if (user.getPseudo().equals(oldPseudo)) {
                 user.setPseudo(newPseudo);
@@ -178,13 +176,11 @@ public class Config implements ConfigObservable, IConfig {
     // Observable for front
     @Override
     public void subscribe(ConfigObserver observer) {
-        System.out.println("subscribe : " + observer);
         this.observers.add(observer);
     }
 
     @Override
     public void notifyChangeRemoteUsers() {
-        System.out.println("notify change user");
         this.observers.forEach(configObserver -> {
             configObserver.updateListRemoteUsers();
         });
@@ -192,7 +188,6 @@ public class Config implements ConfigObservable, IConfig {
 
     @Override
     public void notifyChangeSessions() {
-        System.out.println("notify change session");
         this.observers.forEach(configObserver -> {
             configObserver.updateListSession();
         });

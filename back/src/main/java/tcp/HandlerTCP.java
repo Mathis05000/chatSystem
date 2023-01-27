@@ -5,10 +5,11 @@ import metiers.Service;
 import models.Message;
 import models.MessageChat;
 import observers.CanalTCPObservable;
+import observers.CloseObserver;
 
 import java.io.IOException;
 
-public class HandlerTCP {
+public class HandlerTCP implements CloseObserver {
 
     private TCPServer TCPServer;
     private IService service;
@@ -24,13 +25,25 @@ public class HandlerTCP {
         }
     }
 
+    // Close socket
+
+    public void shutDown() {
+        this.TCPServer.shutDown();
+    }
     // Spring
     public IService getService() {
         return service;
     }
 
     public void setService(IService service) {
+
         this.service = service;
+        this.service.subscribe(this);
+    }
+
+    @Override
+    public void update() {
+        this.shutDown();
     }
     //
 }

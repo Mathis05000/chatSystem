@@ -36,4 +36,12 @@ public class TCPThread extends Thread {
             }
         }
     }
+
+    public void shutDown() {
+        try {
+            this.link.close();
+        } catch (IOException e) {
+            System.out.println("socket closed");
+        }
+    }
 }

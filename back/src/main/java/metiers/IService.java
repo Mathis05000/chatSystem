@@ -1,6 +1,7 @@
 package metiers;
 
 import models.*;
+import observers.CloseObserver;
 
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ public interface IService {
     void processMessageSession(MessageSession m) throws IOException;
     void processMessageChat(MessageChat m) throws IOException;
     void processMessagePseudo(MessagePseudo m);
+    void subscribe(CloseObserver observer);
 
 
 }

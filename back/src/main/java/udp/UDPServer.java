@@ -16,6 +16,8 @@ class UDPServer extends Thread {
     private int sizeBuf = 500;
     private int portUDP = 14000;
 
+    private boolean run = true;
+
     UDPServer(HandlerUDP handlerUDP) {
         try {
             this.dgramSocket = new DatagramSocket(this.portUDP);
@@ -26,11 +28,16 @@ class UDPServer extends Thread {
         this.handler = handlerUDP;
     }
 
-    private Message UDPRecv() throws IOException, ClassNotFoundException {
+    private Message UDPRecv() throws ClassNotFoundException, IOException {
 
         DatagramPacket inPacket = new DatagramPacket(this.buffer, this.buffer.length);
 
-        dgramSocket.receive(inPacket);
+        try {
+            dgramSocket.receive(inPacket);
+        } catch (IOException e) {
+            System.out.println("UDP socket closed");
+            return null;
+        }
 
         InetAddress address = inPacket.getAddress();
 
@@ -45,7 +52,7 @@ class UDPServer extends Thread {
     }
 
     public void run() {
-        while (true) {
+        while (run) {
             try {
                 this.handler.messageHandler(this.UDPRecv());
             } catch (IOException | ClassNotFoundException e) {
@@ -56,6 +63,8 @@ class UDPServer extends Thread {
     }
 
     public void shutdown() {
+        System.out.println("shutdown UDPServer");
         this.dgramSocket.close();
+        this.run = false;
     }
 }

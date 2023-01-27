@@ -5,6 +5,8 @@ import commun.MessageObserver;
 import models.*;
 import observers.CanalTCPObserver;
 import commun.ConfigObserver;
+import observers.CloseObservable;
+import observers.CloseObserver;
 import session.ISession;
 import session.Session;
 import tcp.HandlerTCP;
@@ -14,7 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Service implements IService {
+public class Service implements IService, CloseObservable {
 
     private ICanalUDP myCanalUDP;
     private IConfig myConfig;
@@ -33,9 +35,9 @@ public class Service implements IService {
     }
 
     public void serviceSendDisconnect() throws IOException {
-        System.out.println("sendDisconnect");
         this.myCanalUDP.sendDisconnect(this.myConfig.getPseudo());
         this.myConfig.setConnected(false);
+        this.closeNotify();
     }
 
     public void serviceSendSession(ISession session) throws IOException {
@@ -101,6 +103,8 @@ public class Service implements IService {
     public void processMessagePseudo(MessagePseudo m) {
         this.myConfig.changePseudoRemoteUser(m.getData(), m.getNewPseudo());
     }
+
+
 
 
     //////////
@@ -190,5 +194,17 @@ public class Service implements IService {
     public void setMyConfig(IConfig myConfig) {
         this.myConfig = myConfig;
     }
+
+
     //
+
+    @Override
+    public void closeNotify() {
+        CloseObservable.super.closeNotify();
+    }
+
+    @Override
+    public void subscribe(CloseObserver observer) {
+        CloseObservable.super.subscribe(observer);
+    }
 }
