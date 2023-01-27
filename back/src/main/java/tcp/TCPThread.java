@@ -11,6 +11,7 @@ public class TCPThread extends Thread {
 
     private Socket link;
     private HandlerTCP myHandlerTCP;
+    private boolean run = true;
     public TCPThread(Socket link, HandlerTCP handlerTCP) {
         this.link = link;
         this.myHandlerTCP = handlerTCP;
@@ -26,11 +27,12 @@ public class TCPThread extends Thread {
     }
 
     public void run() {
-        while (true) {
+        while (run) {
             try {
                 this.myHandlerTCP.messageHandler(this.TCPRecv());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("link closed");
+                this.run = false;
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -38,6 +40,7 @@ public class TCPThread extends Thread {
     }
 
     public void shutDown() {
+        this.run = false;
         try {
             this.link.close();
         } catch (IOException e) {

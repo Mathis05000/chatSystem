@@ -45,16 +45,16 @@ public class TCPServer extends Thread {
     }
 
     public void shutDown() {
-        System.out.println("shutdown TCPServer");
+
+        this.run = false;
+        for(TCPThread thread : this.threads) {
+            thread.shutDown();
+        }
         try {
             this.servSocket.close();
         } catch (IOException e) {
             System.out.println("socket closed");
         }
-
-        for(TCPThread thread : this.threads) {
-            thread.shutDown();
-        }
-        this.run = false;
+        System.out.println("shutdown TCPServer");
     }
 }
