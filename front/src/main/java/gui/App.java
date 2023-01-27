@@ -22,7 +22,7 @@ public class App extends Application {
         Parent root = fxmlLoader.load();
         ((LoginController) fxmlLoader.getController()).setService(this.service);
 
-        Scene scene = new Scene(root, 350, 500);
+        Scene scene = new Scene(root);
 
         stage.setOnCloseRequest(e -> {
             try {

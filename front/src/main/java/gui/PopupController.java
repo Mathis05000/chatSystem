@@ -17,6 +17,8 @@ public class PopupController {
     @FXML
     private Label errorLabel;
 
+    private ChatController chatController;
+
     public PopupController() {
 
     }
@@ -31,7 +33,12 @@ public class PopupController {
             pseudo.clear();
         }
         else {
+            this.chatController.setName(pseudo.getText());
             ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
         }
+    }
+
+    public void setChatController(ChatController chatController) {
+        this.chatController = chatController;
     }
 }

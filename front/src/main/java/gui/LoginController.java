@@ -41,6 +41,7 @@ public class LoginController {
         ChatController controller = loaderChat.getController();
 
         controller.setService(this.service);
+        controller.setName(pseudo.getText());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 

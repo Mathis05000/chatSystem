@@ -40,6 +40,12 @@ public class ChatController implements Initializable, ConfigObserver {
     private VBox conversation;
     @FXML
     private TextField input_text;
+    @FXML
+    private Button input_button;
+    @FXML
+    private Label bienvenue;
+    @FXML
+    private Label name;
 
     private Service service;
     private ISession selectedSession;
@@ -102,6 +108,7 @@ public class ChatController implements Initializable, ConfigObserver {
         Parent root = loaderPopup.load();
         PopupController popup = loaderPopup.getController();
         popup.setService(this.service);
+        popup.setChatController(this);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -110,6 +117,11 @@ public class ChatController implements Initializable, ConfigObserver {
 
     public void updateConversation() {
         Platform.runLater(() -> {
+
+            this.input_text.setVisible(true);
+            this.input_button.setVisible(true);
+            this.name.setVisible(false);
+            this.bienvenue.setVisible(false);
 
             this.conversation.getChildren().clear();
 
@@ -175,5 +187,9 @@ public class ChatController implements Initializable, ConfigObserver {
             }
         }
         return null;
+    }
+
+    public void setName(String name) {
+        this.name.setText(name);
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -8,6 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ChatController">
    <children>
@@ -46,12 +48,12 @@
                      <children>
                         <AnchorPane prefHeight="60.0" prefWidth="351.0">
                            <children>
-                              <TextField fx:id="input_text" layoutX="51.0" layoutY="17.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                              <TextField fx:id="input_text" layoutX="51.0" layoutY="17.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="input_button" layoutX="28.0" layoutY="17.0" mnemonicParsing="false" onAction="#onSendMessage" text="Button" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                              <Button fx:id="input_button" layoutX="28.0" layoutY="17.0" mnemonicParsing="false" onAction="#onSendMessage" text="Button" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -60,6 +62,16 @@
             </AnchorPane>
          </children>
       </VBox>
-      <Button layoutX="447.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="140.0" text="Changer de Pseudo" onAction="#onChangePseudo" />
+      <Button layoutX="447.0" layoutY="14.0" mnemonicParsing="false" onAction="#onChangePseudo" prefHeight="26.0" prefWidth="140.0" text="Changer de Pseudo" />
+      <Label fx:id="bienvenue" alignment="CENTER" layoutX="228.0" layoutY="126.0" prefHeight="70.0" prefWidth="350.0" text="Bienvenue">
+         <font>
+            <Font name="STIX Two Math Regular" size="35.0" />
+         </font>
+      </Label>
+      <Label fx:id="name" alignment="CENTER" layoutX="228.0" layoutY="204.0" prefHeight="70.0" prefWidth="350.0">
+         <font>
+            <Font name="STIX Two Math Regular" size="35.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
