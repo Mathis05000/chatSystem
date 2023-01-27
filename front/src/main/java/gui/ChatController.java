@@ -128,6 +128,7 @@ public class ChatController implements Initializable, ConfigObserver {
 
                 for (MessageChat message : this.selectedSession.getMessages()) {
                     Label label = new Label(message.getData());
+                    label.setWrapText(true);
                     Label meta;
                     label.setMaxWidth(Double.MAX_VALUE);
                     System.out.println("src : " + message.getSource());
