@@ -1,10 +1,8 @@
 package tcp;
 
 import metiers.IService;
-import metiers.Service;
 import models.Message;
 import models.MessageChat;
-import observers.CanalTCPObservable;
 import observers.CloseObserver;
 
 import java.io.IOException;

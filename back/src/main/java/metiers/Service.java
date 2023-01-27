@@ -1,15 +1,11 @@
 package metiers;
 
-import commun.MessageObservable;
-import commun.MessageObserver;
 import models.*;
-import observers.CanalTCPObserver;
 import commun.ConfigObserver;
 import observers.CloseObservable;
 import observers.CloseObserver;
 import session.ISession;
 import session.Session;
-import tcp.HandlerTCP;
 import udp.ICanalUDP;
 
 import java.io.IOException;

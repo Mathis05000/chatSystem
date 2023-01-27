@@ -1,15 +1,11 @@
 package udp;
 
-import metiers.Service;
 import models.*;
-import observers.CanalUDPObservable;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CanalUDP implements ICanalUDP{
     private UDPSender UDPClient;
