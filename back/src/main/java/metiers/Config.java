@@ -171,6 +171,7 @@ public class Config implements ConfigObservable, IConfig {
                 this.notifyChangeSessions();
             }
         }
+        this.reservedPseudos.set(this.reservedPseudos.indexOf(oldPseudo), newPseudo);
     }
 
     // Observable for front
