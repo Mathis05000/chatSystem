@@ -117,31 +117,32 @@ public class ChatController implements Initializable, ConfigObserver {
 
     public void updateConversation() {
         Platform.runLater(() -> {
-
-            this.input_text.setVisible(true);
-            this.input_button.setVisible(true);
-            this.name.setVisible(false);
-            this.bienvenue.setVisible(false);
-
             this.conversation.getChildren().clear();
+            if (this.selectedSession != null) {
+                this.input_text.setVisible(true);
+                this.input_button.setVisible(true);
+                this.name.setVisible(false);
+                this.bienvenue.setVisible(false);
 
-            SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-            for (MessageChat message : this.selectedSession.getMessages()) {
-                Label label = new Label(message.getData());
-                Label meta;
-                label.setMaxWidth(Double.MAX_VALUE);
-                System.out.println("src : " + message.getSource());
-                if (message.getSource() == null) {
-                    meta = new Label(s.format(message.getDate()) + " vous : ");
+                for (MessageChat message : this.selectedSession.getMessages()) {
+                    Label label = new Label(message.getData());
+                    Label meta;
+                    label.setMaxWidth(Double.MAX_VALUE);
+                    System.out.println("src : " + message.getSource());
+                    if (message.getSource() == null) {
+                        meta = new Label(s.format(message.getDate()) + " vous : ");
+                    } else {
+                        meta = new Label(s.format(message.getDate()) + " " + this.selectedSession.getUser().getPseudo() + " : ");
+                    }
+                    label.setAlignment(Pos.BASELINE_RIGHT);
+                    HBox box = new HBox();
+                    box.getChildren().addAll(meta, label);
+                    this.conversation.getChildren().add(box);
                 }
-                else {
-                    meta = new Label(s.format(message.getDate()) + " " + this.selectedSession.getUser().getPseudo() + " : ");
-                }
-                label.setAlignment(Pos.BASELINE_RIGHT);
-                HBox box = new HBox();
-                box.getChildren().addAll(meta, label);
-                this.conversation.getChildren().add(box);
+            } else {
+
             }
         });
     }
@@ -152,7 +153,9 @@ public class ChatController implements Initializable, ConfigObserver {
         Platform.runLater(() -> {
             this.observableListRemoteUsers = FXCollections.observableList(service.getRemoteUsers());
             this.listUser.setItems(this.observableListRemoteUsers);
+
         });
+
     }
 
     @Override
@@ -160,6 +163,11 @@ public class ChatController implements Initializable, ConfigObserver {
         Platform.runLater(() -> {
             this.observableListSession = FXCollections.observableList(service.getSessions());
             this.listSession.setItems(this.observableListSession);
+
+            if (!service.getSessions().contains(this.selectedSession)) {
+                this.selectedSession = null;
+                this.updateConversation();
+            }
         });
     }
 
