@@ -101,7 +101,7 @@ public class Dao implements IDao {
         Statement statement = null;
         try {
             statement = this.connection.createStatement();
-            statement.executeQuery("update session set pseudo = '" + newPseudo + "' where pseudo = '" + oldPseudo + "'");
+            statement.executeUpdate("update session set pseudo = '" + newPseudo + "' where pseudo = '" + oldPseudo + "'");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
